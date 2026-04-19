@@ -1,0 +1,40 @@
+import 'package:flutter/foundation.dart';
+
+enum ViewState { idle, loading, success, error }
+
+abstract class BaseViewModel extends ChangeNotifier {
+  ViewState _state = ViewState.idle;
+  String? _errorMessage;
+
+  ViewState get state => _state;
+  String? get errorMessage => _errorMessage;
+  bool get isLoading => _state == ViewState.loading;
+
+  @protected
+  void setLoading() {
+    _state = ViewState.loading;
+    _errorMessage = null;
+    notifyListeners();
+  }
+
+  @protected
+  void setSuccess() {
+    _state = ViewState.success;
+    _errorMessage = null;
+    notifyListeners();
+  }
+
+  @protected
+  void setIdle() {
+    _state = ViewState.idle;
+    _errorMessage = null;
+    notifyListeners();
+  }
+
+  @protected
+  void setError(String message) {
+    _state = ViewState.error;
+    _errorMessage = message;
+    notifyListeners();
+  }
+}
