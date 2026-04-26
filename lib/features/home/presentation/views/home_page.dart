@@ -2,13 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:litigation_management_system/core/constants/app_strings.dart';
-import 'package:litigation_management_system/features/customer_360/presentation/views/customer_360_page.dart';
 import 'package:litigation_management_system/features/dashboard/presentation/viewmodels/dashboard_view_model.dart';
 import 'package:litigation_management_system/features/dashboard/presentation/widgets/dashboard_shell_widgets.dart';
 import 'package:litigation_management_system/features/dashboard/presentation/views/dashboard_page.dart';
 import 'package:litigation_management_system/features/legal_cost/presentation/views/legal_cost_page.dart';
 import 'package:litigation_management_system/shared/widgets/app_shell/app_shell_drawer.dart';
 import 'package:litigation_management_system/shared/widgets/app_shell/dynamic_app_bar.dart';
+
+import '../../../customer_360/presentation/views/customer_360_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -24,6 +25,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
+  bool _isLegalCostSearchMode = false;
+  bool _isCustomer360SearchMode = false;
+  final TextEditingController _legalCostSearchController =
+      TextEditingController();
+  final TextEditingController _customer360SearchController =
+      TextEditingController();
 
   late final List<_HomeTabItem> _tabs = [
     _HomeTabItem(
@@ -31,15 +38,25 @@ class _HomePageState extends State<HomePage> {
       icon: Icons.dashboard_customize_outlined,
       page: DashboardContent(viewModel: widget.dashboardViewModel),
     ),
-    const _HomeTabItem(
+    _HomeTabItem(
       title: AppStrings.legalCostTitle,
       icon: Icons.account_balance_wallet_outlined,
-      page: LegalCostPage(),
+      page: ValueListenableBuilder<TextEditingValue>(
+        valueListenable: _legalCostSearchController,
+        builder: (context, value, _) {
+          return LegalCostPage(searchQuery: value.text);
+        },
+      ),
     ),
-    const _HomeTabItem(
+    _HomeTabItem(
       title: AppStrings.customer360Title,
       icon: Icons.people_alt_outlined,
-      page: Customer360Page(),
+      page: ValueListenableBuilder<TextEditingValue>(
+        valueListenable: _customer360SearchController,
+        builder: (context, value, _) {
+          return Customer360Page(searchQuery: value.text);
+        },
+      ),
     ),
   ];
 
@@ -125,7 +142,17 @@ class _HomePageState extends State<HomePage> {
   void _onDestinationSelected(int index) {
     setState(() {
       _currentIndex = index;
+      _isLegalCostSearchMode = index == 1 ? _isLegalCostSearchMode : false;
+      _isCustomer360SearchMode =
+          index == 2 ? _isCustomer360SearchMode : false;
     });
+  }
+
+  @override
+  void dispose() {
+    _legalCostSearchController.dispose();
+    _customer360SearchController.dispose();
+    super.dispose();
   }
 
   void _onDrawerMenuTap(String title) {
@@ -221,6 +248,158 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void _handleSearchTap() {
+    if (_currentIndex == 1) {
+      setState(() {
+        _isLegalCostSearchMode = true;
+      });
+      return;
+    }
+
+    if (_currentIndex == 2) {
+      setState(() {
+        _isCustomer360SearchMode = true;
+      });
+      return;
+    }
+
+    _showActiveSearchDialog();
+  }
+
+  void _closeLegalCostSearch() {
+    setState(() {
+      _isLegalCostSearchMode = false;
+    });
+    _legalCostSearchController.clear();
+  }
+
+  void _closeCustomer360Search() {
+    setState(() {
+      _isCustomer360SearchMode = false;
+    });
+    _customer360SearchController.clear();
+  }
+
+  Widget _buildLegalCostSearchTitle() {
+    return Container(
+      height: 42,
+      margin: const EdgeInsets.only(right: 8),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFDFEFF),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFC9DAF8)),
+      ),
+      child: TextField(
+        controller: _legalCostSearchController,
+        autofocus: true,
+        cursorColor: const Color(0xFF0B5FFF),
+        decoration: InputDecoration(
+          hintText: 'Search legal cost records',
+          hintStyle: const TextStyle(
+            color: Color(0xFF6B84AA),
+            fontSize: 14,
+          ),
+          prefixIcon: const Icon(
+            Icons.search_rounded,
+            color: Color(0xFF214A84),
+            size: 20,
+          ),
+          suffixIcon: IconButton(
+            onPressed: _closeLegalCostSearch,
+            icon: const Icon(
+              Icons.close_rounded,
+              color: Color(0xFF214A84),
+              size: 20,
+            ),
+            splashRadius: 18,
+          ),
+          isDense: true,
+          filled: true,
+          fillColor: const Color(0xFFFDFEFF),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 4,
+            vertical: 10,
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none,
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(
+              color: Color(0xFF0B5FFF),
+              width: 1.1,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCustomer360SearchTitle() {
+    return Container(
+      height: 42,
+      margin: const EdgeInsets.only(right: 8),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFDFEFF),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFC9DAF8)),
+      ),
+      child: TextField(
+        controller: _customer360SearchController,
+        autofocus: true,
+        cursorColor: const Color(0xFF0B5FFF),
+        decoration: InputDecoration(
+          hintText: 'Search A/C no, card no, or account name',
+          hintStyle: const TextStyle(
+            color: Color(0xFF6B84AA),
+            fontSize: 14,
+          ),
+          prefixIcon: const Icon(
+            Icons.search_rounded,
+            color: Color(0xFF214A84),
+            size: 20,
+          ),
+          suffixIcon: IconButton(
+            onPressed: _closeCustomer360Search,
+            icon: const Icon(
+              Icons.close_rounded,
+              color: Color(0xFF214A84),
+              size: 20,
+            ),
+            splashRadius: 18,
+          ),
+          isDense: true,
+          filled: true,
+          fillColor: const Color(0xFFFDFEFF),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 4,
+            vertical: 10,
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none,
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(
+              color: Color(0xFF0B5FFF),
+              width: 1.1,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildBottomNavigation() {
     return SafeArea(
       top: false,
@@ -306,9 +485,14 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: const Color(0xFFF3F7FB),
       appBar: DynamicAppBar(
         title: activeTab.title,
+        titleContent: _currentIndex == 1 && _isLegalCostSearchMode
+            ? _buildLegalCostSearchTitle()
+            : _currentIndex == 2 && _isCustomer360SearchMode
+                ? _buildCustomer360SearchTitle()
+                : null,
         actions: [
           _AppBarActionButton(
-            onPressed: _showActiveSearchDialog,
+            onPressed: _handleSearchTap,
             icon: Icons.search_rounded,
           ),
           const SizedBox(width: 8),

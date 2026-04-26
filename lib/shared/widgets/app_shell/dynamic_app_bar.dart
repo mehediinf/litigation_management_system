@@ -5,10 +5,12 @@ class DynamicAppBar extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     required this.title,
     this.actions,
+    this.titleContent,
   });
 
   final String title;
   final List<Widget>? actions;
+  final Widget? titleContent;
 
   @override
   Size get preferredSize => const Size.fromHeight(66);
@@ -36,58 +38,59 @@ class DynamicAppBar extends StatelessWidget implements PreferredSizeWidget {
         size: 22,
       ),
       titleSpacing: 0,
-      title: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(
-              color: const Color(0xFFFDFEFF),
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: const Color(0xFFC9DAF8)),
-              boxShadow: const [
-                BoxShadow(
-                  color: Color(0x120B5FFF),
-                  blurRadius: 12,
-                  offset: Offset(0, 4),
+      title: titleContent ??
+          Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFDFEFF),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: const Color(0xFFC9DAF8)),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x120B5FFF),
+                      blurRadius: 12,
+                      offset: Offset(0, 4),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            child: Image.asset(
-              'assets/images/lms_logo1.png',
-              fit: BoxFit.contain,
-            ),
+                child: Image.asset(
+                  'assets/images/lms_logo1.png',
+                  fit: BoxFit.contain,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      title,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 19,
+                            color: const Color(0xFF16345C),
+                          ),
+                    ),
+                    Text(
+                      'BRAC Bank Litigation',
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            fontSize: 11,
+                            color: const Color(0xFF5D7FAF),
+                            fontWeight: FontWeight.w600,
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  title,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 19,
-                        color: const Color(0xFF16345C),
-                      ),
-                ),
-                Text(
-                  'BRAC Bank Litigation',
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        fontSize: 11,
-                        color: const Color(0xFF5D7FAF),
-                        fontWeight: FontWeight.w600,
-                      ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
       actions: [
         if (actions != null) ...actions!,
       ],
