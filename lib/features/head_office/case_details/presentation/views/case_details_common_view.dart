@@ -1,5 +1,4 @@
 
-
 import 'package:flutter/material.dart';
 
 class CaseDetailsAdvancedSearchConfig {
@@ -18,11 +17,20 @@ class CaseDetailsAdvancedSearchConfig {
     this.showFilingDate = true,
     this.showPortfolio = true,
     this.showCaseNo = true,
+    this.showSuitType = false,
+    this.showNextDate = false,
+    this.showMonitoringDept = false,
+    this.showDependentType = false,
+    this.showRiskFactor = false,
     this.caseTypeOptions = const ['Type Of Case', 'Civil', 'Criminal', 'Artha Rin'],
     this.proposedTypeOptions = const ['Proposed Type', 'New', 'Running', 'Closed'],
+    this.suitTypeOptions = const ['Select Suit Type', 'By Bank', 'Against Bank'],
     this.regionOptions = const ['Select Region', 'Dhaka', 'Chattogram', 'Khulna'],
     this.territoryOptions = const ['Select territory', 'North Territory', 'South Territory'],
     this.districtOptions = const ['Select district', 'Dhaka', 'Narayanganj', 'Gazipur'],
+    this.monitoringDeptOptions = const ['Select Monitoring Dept.', 'Corporate', 'Retail', 'SME'],
+    this.dependentTypeOptions = const ['Select dependent Type', 'Type 1', 'Type 2', 'Type 3'],
+    this.riskFactorOptions = const ['Select Risk Factor', 'High', 'Medium', 'Low'],
     this.unitOptions = const ['Select unit office', 'Unit Office A', 'Unit Office B', 'Unit Office C'],
     this.portfolioOptions = const ['SME', 'Retail', 'Corporate'],
     this.divisionOptions = const ['Select Division', 'High Court Division', 'Appellate Division'],
@@ -43,11 +51,20 @@ class CaseDetailsAdvancedSearchConfig {
   final bool showFilingDate;
   final bool showPortfolio;
   final bool showCaseNo;
+  final bool showSuitType;
+  final bool showNextDate;
+  final bool showMonitoringDept;
+  final bool showDependentType;
+  final bool showRiskFactor;
   final List<String> caseTypeOptions;
   final List<String> proposedTypeOptions;
+  final List<String> suitTypeOptions;
   final List<String> regionOptions;
   final List<String> territoryOptions;
   final List<String> districtOptions;
+  final List<String> monitoringDeptOptions;
+  final List<String> dependentTypeOptions;
+  final List<String> riskFactorOptions;
   final List<String> unitOptions;
   final List<String> portfolioOptions;
   final List<String> divisionOptions;
@@ -105,6 +122,10 @@ class _CaseDetailsCommonViewState extends State<CaseDetailsCommonView> {
     String region = config.regionOptions.isNotEmpty ? config.regionOptions.first : '';
     String territory = config.territoryOptions.isNotEmpty ? config.territoryOptions.first : '';
     String district = config.districtOptions.isNotEmpty ? config.districtOptions.first : '';
+    String suitType = config.suitTypeOptions.isNotEmpty ? config.suitTypeOptions.first : '';
+    String monitoringDept = config.monitoringDeptOptions.isNotEmpty ? config.monitoringDeptOptions.first : '';
+    String dependentType = config.dependentTypeOptions.isNotEmpty ? config.dependentTypeOptions.first : '';
+    String riskFactor = config.riskFactorOptions.isNotEmpty ? config.riskFactorOptions.first : '';
     String unitOffice = config.unitOptions.isNotEmpty ? config.unitOptions.first : '';
     String portfolio = config.portfolioOptions.isNotEmpty ? config.portfolioOptions.first : '';
     String division = config.divisionOptions.isNotEmpty ? config.divisionOptions.first : '';
@@ -114,6 +135,7 @@ class _CaseDetailsCommonViewState extends State<CaseDetailsCommonView> {
     final cifController = TextEditingController();
     final fromController = TextEditingController();
     final toController = TextEditingController();
+    final nextDateController = TextEditingController();
     final caseNoController = TextEditingController();
 
     Future<void> pickDate(TextEditingController controller) async {
@@ -231,6 +253,15 @@ class _CaseDetailsCommonViewState extends State<CaseDetailsCommonView> {
                                   hint: config.showDivision ? 'Case Number' : null,
                                 ),
                               if (config.showCif) _textField(label: 'CIF', controller: cifController),
+                              if (config.showCaseNo) _textField(label: 'Case Number', controller: caseNoController),
+                              if (config.showSuitType)
+                                _dropdownField(
+                                  context: context,
+                                  label: 'Suit Type',
+                                  value: suitType,
+                                  options: config.suitTypeOptions,
+                                  onChanged: (v) => setLocalState(() => suitType = v),
+                                ),
                               const SizedBox(height: 8),
                               if (config.showTerritory || config.showRegion || config.showDistrict || config.showUnit) ...[
                                 _sectionLabel('Location'),
@@ -253,6 +284,30 @@ class _CaseDetailsCommonViewState extends State<CaseDetailsCommonView> {
                                     options: config.districtOptions,
                                     onChanged: (v) => setLocalState(() => district = v),
                                   ),
+                                if (config.showMonitoringDept)
+                                  _dropdownField(
+                                    context: context,
+                                    label: 'Monitoring Dept.',
+                                    value: monitoringDept,
+                                    options: config.monitoringDeptOptions,
+                                    onChanged: (v) => setLocalState(() => monitoringDept = v),
+                                  ),
+                                if (config.showDependentType)
+                                  _dropdownField(
+                                    context: context,
+                                    label: 'Dependent Type',
+                                    value: dependentType,
+                                    options: config.dependentTypeOptions,
+                                    onChanged: (v) => setLocalState(() => dependentType = v),
+                                  ),
+                                if (config.showRiskFactor)
+                                  _dropdownField(
+                                    context: context,
+                                    label: 'Risk Factor',
+                                    value: riskFactor,
+                                    options: config.riskFactorOptions,
+                                    onChanged: (v) => setLocalState(() => riskFactor = v),
+                                  ),
                                 if (config.showUnit)
                                   _dropdownField(
                                     context: context, label: 'Unit', value: unitOffice,
@@ -273,11 +328,15 @@ class _CaseDetailsCommonViewState extends State<CaseDetailsCommonView> {
                                 ),
                                 const SizedBox(height: 8),
                               ],
-                              if (config.showCaseNo || config.showPortfolio) ...[
+                              if (config.showNextDate)
+                                _dateField(
+                                  label: 'Next Date',
+                                  controller: nextDateController,
+                                  onTap: () => pickDate(nextDateController),
+                                ),
+                              if (config.showPortfolio) ...[
                                 _sectionLabel('Other'),
                                 const SizedBox(height: 10),
-                                if (config.showCaseNo)
-                                  _textField(label: 'Case No.', controller: caseNoController),
                                 if (config.showPortfolio)
                                   _dropdownField(
                                     context: context, label: 'Portfolio', value: portfolio,
@@ -327,13 +386,18 @@ class _CaseDetailsCommonViewState extends State<CaseDetailsCommonView> {
                                   if (config.showProposedType && proposedType != config.proposedTypeOptions.first) parts.add(proposedType);
                                   if (config.showNo && noController.text.trim().isNotEmpty) parts.add(noController.text.trim());
                                   if (config.showCif && cifController.text.trim().isNotEmpty) parts.add(cifController.text.trim());
+                                  if (config.showCaseNo && caseNoController.text.trim().isNotEmpty) parts.add(caseNoController.text.trim());
+                                  if (config.showSuitType && suitType != config.suitTypeOptions.first) parts.add(suitType);
                                   if (region != config.regionOptions.first) parts.add(region);
                                   if (config.showTerritory && territory != config.territoryOptions.first) parts.add(territory);
                                   if (district != config.districtOptions.first) parts.add(district);
+                                  if (config.showMonitoringDept && monitoringDept != config.monitoringDeptOptions.first) parts.add(monitoringDept);
+                                  if (config.showDependentType && dependentType != config.dependentTypeOptions.first) parts.add(dependentType);
+                                  if (config.showRiskFactor && riskFactor != config.riskFactorOptions.first) parts.add(riskFactor);
                                   if (unitOffice != config.unitOptions.first) parts.add(unitOffice);
                                   if (fromController.text.trim().isNotEmpty) parts.add(fromController.text.trim());
                                   if (toController.text.trim().isNotEmpty) parts.add(toController.text.trim());
-                                  if (caseNoController.text.trim().isNotEmpty) parts.add(caseNoController.text.trim());
+                                  if (config.showNextDate && nextDateController.text.trim().isNotEmpty) parts.add(nextDateController.text.trim());
                                   if (portfolio != config.portfolioOptions.first) parts.add(portfolio);
                                   final keyword = parts.join(' ').trim();
                                   setState(() {
@@ -368,6 +432,7 @@ class _CaseDetailsCommonViewState extends State<CaseDetailsCommonView> {
     cifController.dispose();
     fromController.dispose();
     toController.dispose();
+    nextDateController.dispose();
     caseNoController.dispose();
   }
 

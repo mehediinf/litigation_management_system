@@ -230,8 +230,8 @@ class _LowerCourtCaseCardState extends State<LowerCourtCaseCard>
                     Row(
                       children: [
                         _actionBtn(
-                          Icons.picture_as_pdf_rounded,
-                          'Export PDF',
+                          Icons.preview,
+                          'Preview',
                           const Color(0xFFEF4444),
                           const Color(0xFFFEE2E2),
                               () {},
@@ -802,3 +802,7 @@ final List<Map<String, dynamic>> _dummyCases = [
     'Legal as per(last updated date)': '04-Dec-25 11:47 AM',
   },
 ];
+
+
+
+
