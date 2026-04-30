@@ -1,5 +1,6 @@
 // lib/features/head_office/supreme_court_matter/presentation/views/case_filling.dart
 
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
 class CaseFillingPage extends StatefulWidget {
@@ -191,6 +192,7 @@ class _FormTabState extends State<_FormTab> {
                   ),
                 ),
               ),
+              const SizedBox(height: 120),
             ],
           ),
         ],
@@ -223,7 +225,7 @@ class _FormCard extends StatelessWidget {
   }
 }
 
-class _FormDropdown extends StatelessWidget {
+class _FormDropdown extends StatefulWidget {
   const _FormDropdown({
     required this.label,
     required this.value,
@@ -237,6 +239,11 @@ class _FormDropdown extends StatelessWidget {
   final ValueChanged<String> onChanged;
 
   @override
+  State<_FormDropdown> createState() => _FormDropdownState();
+}
+
+class _FormDropdownState extends State<_FormDropdown> {
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -244,7 +251,7 @@ class _FormDropdown extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            label,
+            widget.label,
             style: const TextStyle(
               fontSize: 11.5,
               fontWeight: FontWeight.w700,
@@ -253,36 +260,54 @@ class _FormDropdown extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 6),
-          DropdownButtonFormField<String>(
-            value: value,
-            isExpanded: true,
-            icon: const Icon(Icons.keyboard_arrow_down_rounded, size: 20, color: Color(0xFF1552B0)),
-            decoration: InputDecoration(
-              isDense: true,
-              filled: true,
-              fillColor: const Color(0xFFF7F9FD),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Colors.grey.shade200),
+          DropdownSearch<String>(
+            items: widget.options,
+            selectedItem: widget.value,
+            filterFn: (item, filter) =>
+                item.toLowerCase().contains(filter.toLowerCase()),
+            dropdownDecoratorProps: DropDownDecoratorProps(
+              dropdownSearchDecoration: InputDecoration(
+                isDense: true,
+                filled: true,
+                fillColor: const Color(0xFFF7F9FD),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: Colors.grey.shade200),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: Colors.grey.shade200),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(
+                      color: Color(0xFF1552B0), width: 1.5),
+                ),
+                contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 14, vertical: 12),
               ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Colors.grey.shade200),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: Color(0xFF1552B0), width: 1.5),
-              ),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
             ),
-            items: options
-                .map((opt) => DropdownMenuItem<String>(
-              value: opt,
-              child: Text(opt, style: const TextStyle(fontSize: 13.5)),
-            ))
-                .toList(),
+            popupProps: PopupProps.menu(
+              showSearchBox: true,
+              searchFieldProps: TextFieldProps(
+                decoration: InputDecoration(
+                  hintText: 'Search...',
+                  prefixIcon: const Icon(Icons.search_rounded, size: 18),
+                  isDense: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 12, vertical: 10),
+                ),
+              ),
+              menuProps: MenuProps(
+                borderRadius: BorderRadius.circular(14),
+              ),
+              constraints: const BoxConstraints(maxHeight: 250),
+            ),
             onChanged: (v) {
-              if (v != null) onChanged(v);
+              if (v != null) widget.onChanged(v);
             },
           ),
           Divider(height: 16, color: Colors.grey.shade100),
