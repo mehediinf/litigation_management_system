@@ -1,6 +1,7 @@
 //lib/features/customer_360/presentation/views/customer_360_page.dart
 
 import 'package:flutter/material.dart';
+import 'package:litigation_management_system/app/theme/app_color.dart';
 import 'package:litigation_management_system/app/router/app_router.dart';
 import 'package:litigation_management_system/features/customer_360/presentation/widgets/customer_360_widgets.dart';
 
@@ -116,7 +117,7 @@ class _CustomerSectionCard extends StatelessWidget {
         boxShadow: Customer360Tokens.softShadow,
       ),
       child: Material(
-        color: Colors.transparent,
+        color: AppColor.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(18),
           onTap: onTap,

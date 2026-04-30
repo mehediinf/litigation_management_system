@@ -1,6 +1,7 @@
 //lib/features/legal_cost/presentation/views/legal_cost_page.dart
 
 import 'package:flutter/material.dart';
+import 'package:litigation_management_system/app/theme/app_color.dart';
 
 class LegalCostPage extends StatelessWidget {
   const LegalCostPage({
@@ -444,24 +445,18 @@ class _LegalCostEntry {
 }
 
 class _LegalCostTokens {
-  static const Color primary = Color(0xFF0B5FFF);
-  static const Color surface = Color(0xFFFDFEFF);
-  static const Color softBlue = Color(0xFFF2F7FF);
-  static const Color border = Color(0xFFE1EAF5);
-  static const Color divider = Color(0xFFE7EDF6);
-  static const Color textPrimary = Color(0xFF10243E);
-  static const Color textSecondary = Color(0xFF6A7C92);
-  static const Color amountBg = Color(0xFFFFF4F7);
-  static const Color amountBorder = Color(0xFFFFD9E6);
-  static const Color amountText = Color(0xFFD9487D);
-  static const Color amountTextMuted = Color(0xFF9B5570);
-  static const Color caseTypeBg = Color(0xFFEFF5FF);
+  static const Color primary = AppColor.primary;
+  static const Color surface = AppColor.panelBg;
+  static const Color softBlue = AppColor.softBlueAlt;
+  static const Color border = AppColor.legalCostBorder;
+  static const Color divider = AppColor.legalCostDivider;
+  static const Color textPrimary = AppColor.legalCostTextPrimary;
+  static const Color textSecondary = AppColor.legalCostTextSecondary;
+  static const Color amountBg = AppColor.legalCostAmountBg;
+  static const Color amountBorder = AppColor.legalCostAmountBorder;
+  static const Color amountText = AppColor.legalCostAmountText;
+  static const Color amountTextMuted = AppColor.legalCostAmountTextMuted;
+  static const Color caseTypeBg = AppColor.legalCostCaseTypeBg;
 
-  static const List<BoxShadow> softShadow = [
-    BoxShadow(
-      color: Color(0x0C0F172A),
-      blurRadius: 16,
-      offset: Offset(0, 8),
-    ),
-  ];
+  static const List<BoxShadow> softShadow = AppColor.legalCostShadowList;
 }

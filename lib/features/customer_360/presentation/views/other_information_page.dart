@@ -3,8 +3,15 @@
 import 'package:flutter/material.dart';
 import 'package:litigation_management_system/features/customer_360/presentation/widgets/customer_360_widgets.dart';
 
-class OtherInformationPage extends StatelessWidget {
+class OtherInformationPage extends StatefulWidget {
   const OtherInformationPage({super.key});
+
+  @override
+  State<OtherInformationPage> createState() => _OtherInformationPageState();
+}
+
+class _OtherInformationPageState extends State<OtherInformationPage> {
+  bool _isRemarksCollapsed = false;
 
   static const String _remarksText =
       'Avast red ensign parley clap of thunder no prey, no pay killick stern '
@@ -26,11 +33,15 @@ class OtherInformationPage extends StatelessWidget {
                 delegate: StickyHeaderDelegate(
                   title: 'Additional Remarks',
                   icon: Icons.notes_rounded,
+                  onTap: () =>
+                      setState(() => _isRemarksCollapsed = !_isRemarksCollapsed),
+                  isCollapsed: _isRemarksCollapsed,
                 ),
               ),
-              SliverToBoxAdapter(
-                child: _NarrativeCard(text: _remarksText),
-              ),
+              if (!_isRemarksCollapsed)
+                SliverToBoxAdapter(
+                  child: _NarrativeCard(text: _remarksText),
+                ),
             ],
           ),
 

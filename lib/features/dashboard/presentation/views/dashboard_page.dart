@@ -1,6 +1,7 @@
 // lib/features/dashboard/presentation/views/dashboard_page.dart
 
 import 'package:flutter/material.dart';
+import 'package:litigation_management_system/app/theme/app_color.dart';
 import 'package:litigation_management_system/core/constants/app_strings.dart';
 import 'package:litigation_management_system/features/dashboard/presentation/viewmodels/dashboard_view_model.dart';
 import 'package:litigation_management_system/features/dashboard/presentation/widgets/dashboard_chart_widgets.dart';
@@ -24,7 +25,7 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F7FB),
+      backgroundColor: AppColor.drawerBg,
       body: SafeArea(
         child: DashboardContent(viewModel: widget.viewModel),
       ),
@@ -102,13 +103,13 @@ class _DashboardContentState extends State<DashboardContent> {
                       DashboardPanelCard(
                         title: 'Live Case Information',
                         icon: Icons.query_stats_outlined,
-                        child: VerticalBarChart(
+                          child: VerticalBarChart(
                           metrics: summary.liveCaseInformation,
                           colors: const [
-                            Color(0xFF7C83FD),
-                            Color(0xFF55D6BE),
-                            Color(0xFFFF8A80),
-                            Color(0xFF62B6CB),
+                            AppColor.dashboardMetricIndigo,
+                            AppColor.dashboardMetricMint,
+                            AppColor.dashboardMetricCoral,
+                            AppColor.dashboardMetricTeal,
                           ],
                         ),
                       ),
@@ -119,8 +120,8 @@ class _DashboardContentState extends State<DashboardContent> {
                           icon: Icons.gavel_outlined,
                           child: DonutBreakdown(
                             ratio: summary.warrantProcess,
-                            primaryColor: const Color(0xFF3B82F6),
-                            secondaryColor: const Color(0xFFE2E8F0),
+                            primaryColor: AppColor.dashboardAccentBlue,
+                            secondaryColor: AppColor.borderSoft,
                           ),
                         ),
                         right: DashboardPanelCard(
@@ -129,8 +130,8 @@ class _DashboardContentState extends State<DashboardContent> {
                           child: VerticalBarChart(
                             metrics: summary.hcAdMatter,
                             colors: const [
-                              Color(0xFF8B7CF7),
-                              Color(0xFF9BD0F5),
+                              AppColor.dashboardMetricPurple,
+                              AppColor.dashboardMetricSky,
                             ],
                           ),
                         ),
@@ -142,10 +143,10 @@ class _DashboardContentState extends State<DashboardContent> {
                         child: VerticalBarChart(
                           metrics: summary.caseUpdateInformation,
                           colors: const [
-                            Color(0xFF93C5FD),
-                            Color(0xFFEF4444),
-                            Color(0xFFA3E635),
-                            Color(0xFFC4B5FD),
+                            AppColor.dashboardLegendSecondary,
+                            AppColor.dashboardMetricRed,
+                            AppColor.dashboardMetricLime,
+                            AppColor.dashboardMetricLavender,
                           ],
                         ),
                       ),
@@ -156,8 +157,8 @@ class _DashboardContentState extends State<DashboardContent> {
                           icon: Icons.payments_outlined,
                           child: DonutBreakdown(
                             ratio: summary.appealAndBailMoney,
-                            primaryColor: const Color(0xFF2563EB),
-                            secondaryColor: const Color(0xFFFB7185),
+                            primaryColor: AppColor.dashboardAccentBlueStrong,
+                            secondaryColor: AppColor.dashboardAccentPink,
                           ),
                         ),
                         right: DashboardPanelCard(
@@ -166,12 +167,12 @@ class _DashboardContentState extends State<DashboardContent> {
                           child: VerticalBarChart(
                             metrics: summary.professionalBills,
                             colors: const [
-                              Color(0xFFE2E8F0),
-                              Color(0xFFE2E8F0),
-                              Color(0xFFE2E8F0),
-                              Color(0xFF67C3D3),
-                              Color(0xFFD8E97A),
-                              Color(0xFF8B6FBF),
+                              AppColor.borderSoft,
+                              AppColor.borderSoft,
+                              AppColor.borderSoft,
+                              AppColor.dashboardMetricCyan,
+                              AppColor.dashboardMetricOlive,
+                              AppColor.dashboardMetricViolet,
                             ],
                           ),
                         ),
@@ -195,37 +196,37 @@ class _DashboardContentState extends State<DashboardContent> {
                             label: '1st Legal Notice',
                             value: '${summary.firstLegalNotice}',
                             icon: Icons.mark_email_read_outlined,
-                            accent: const Color(0xFF0A5FFF),
+                            accent: AppColor.primaryStrong,
                           ),
                           DashboardMetricCard(
                             label: 'CMA Approved',
                             value: '${summary.cmaApproved}',
                             icon: Icons.check_circle_outline,
-                            accent: const Color(0xFF00A389),
+                            accent: AppColor.dashboardAccentGreen,
                           ),
                           DashboardMetricCard(
                             label: 'Auction Completed',
                             value: '${summary.auctionCompleted}',
                             icon: Icons.gavel_outlined,
-                            accent: const Color(0xFFF59E0B),
+                            accent: AppColor.dashboardAccentOrange,
                           ),
                           DashboardMetricCard(
                             label: 'Compliance & Regulatory',
                             value: '${summary.complianceRegulatory}',
                             icon: Icons.verified_user_outlined,
-                            accent: const Color(0xFF8B5CF6),
+                            accent: AppColor.dashboardAccentPurple,
                           ),
 
                           DashboardMetricCard(
                             label: 'Legal Cost',
                             value: '${summary.legalCostCr.toStringAsFixed(2)} Cr.',
                             icon: Icons.account_balance_wallet_outlined,
-                            accent: const Color(0xFFE64980),
+                            accent: AppColor.dashboardAccentRose,
                           ),
                           DashboardMetricCard(
                             label: 'Litigation Management Handbook',
                             icon: Icons.auto_stories_outlined,
-                            accent: const Color(0xFFF59E0B),
+                            accent: AppColor.dashboardAccentOrange,
                             showValue: false,
                           ),
 
@@ -257,7 +258,6 @@ class _DashboardContentState extends State<DashboardContent> {
     );
   }
 }
-
 
 
 

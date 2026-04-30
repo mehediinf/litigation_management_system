@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:litigation_management_system/app/theme/app_color.dart';
 import 'package:litigation_management_system/features/dashboard/domain/entities/dashboard_summary.dart';
 
 class ComparisonChart extends StatelessWidget {
@@ -23,9 +24,9 @@ class ComparisonChart extends StatelessWidget {
       children: [
         Row(
           children: const [
-            _LegendDot(label: 'File Delivered', color: Color(0xFF1D4ED8)),
+            _LegendDot(label: 'File Delivered', color: AppColor.dashboardLegendPrimary),
             SizedBox(width: 14),
-            _LegendDot(label: 'Cheque Delivered', color: Color(0xFF93C5FD)),
+            _LegendDot(label: 'Cheque Delivered', color: AppColor.dashboardLegendSecondary),
           ],
         ),
         const SizedBox(height: 18),
@@ -58,7 +59,7 @@ class ComparisonChart extends StatelessWidget {
                           width: primaryWidth,
                           height: 24,
                           decoration: const BoxDecoration(
-                            color: Color(0xFF0B5FFF),
+                            color: AppColor.primary,
                             borderRadius: BorderRadius.horizontal(
                               left: Radius.circular(999),
                             ),
@@ -67,7 +68,7 @@ class ComparisonChart extends StatelessWidget {
                           child: Text(
                             '${item.primaryValue}',
                             style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                                  color: Colors.white,
+                                  color: AppColor.white,
                                   fontWeight: FontWeight.w700,
                                 ),
                           ),
@@ -76,7 +77,7 @@ class ComparisonChart extends StatelessWidget {
                           width: secondaryWidth,
                           height: 24,
                           decoration: const BoxDecoration(
-                            color: Color(0xFFB9D4FF),
+                            color: AppColor.dashboardBarSecondary,
                             borderRadius: BorderRadius.horizontal(
                               right: Radius.circular(999),
                             ),
@@ -85,7 +86,7 @@ class ComparisonChart extends StatelessWidget {
                           child: Text(
                             '${item.secondaryValue}',
                             style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                                  color: const Color(0xFF0F172A),
+                                  color: AppColor.textPrimary,
                                   fontWeight: FontWeight.w700,
                                 ),
                           ),
@@ -140,7 +141,7 @@ class VerticalBarChart extends StatelessWidget {
                         ? metric.value.toInt().toString()
                         : metric.value.toStringAsFixed(2),
                     style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                          color: const Color(0xFF475569),
+                          color: AppColor.textSlate,
                           fontWeight: FontWeight.w700,
                         ),
                     textAlign: TextAlign.center,
@@ -168,7 +169,7 @@ class VerticalBarChart extends StatelessWidget {
                   Text(
                     metric.label,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: const Color(0xFF475569),
+                          color: AppColor.textSlate,
                           fontWeight: FontWeight.w600,
                         ),
                     textAlign: TextAlign.center,
@@ -238,7 +239,7 @@ class DonutBreakdown extends StatelessWidget {
                   Text(
                     ratio.primaryLabel,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: const Color(0xFF64748B),
+                          color: AppColor.textSecondary,
                         ),
                     textAlign: TextAlign.center,
                   ),
@@ -295,7 +296,7 @@ class _LegendDot extends StatelessWidget {
         Text(
           label,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: const Color(0xFF475569),
+                color: AppColor.textSlate,
               ),
         ),
       ],
@@ -319,9 +320,9 @@ class _LegendStat extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FBFF),
+        color: AppColor.sectionBg,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE2E8F0)),
+        border: Border.all(color: AppColor.borderSoft),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -338,7 +339,7 @@ class _LegendStat extends StatelessWidget {
                 child: Text(
                   label,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: const Color(0xFF475569),
+                        color: AppColor.textSlate,
                       ),
                 ),
               ),

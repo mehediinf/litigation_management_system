@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:litigation_management_system/features/customer_360/presentation/views/auction_details_page.dart';
 import 'package:litigation_management_system/features/customer_360/presentation/views/cma_details_page.dart';
@@ -12,6 +13,10 @@ import 'package:litigation_management_system/features/dashboard/domain/usecases/
 import 'package:litigation_management_system/features/dashboard/presentation/viewmodels/dashboard_view_model.dart';
 import 'package:litigation_management_system/features/dashboard/presentation/views/dashboard_page.dart';
 import 'package:litigation_management_system/features/home/presentation/views/home_page.dart';
+import 'package:litigation_management_system/features/head_office/case_details/presentation/views/hc_ad_case_details.dart';
+import 'package:litigation_management_system/features/head_office/case_details/presentation/views/legal_advisory_case_details.dart';
+import 'package:litigation_management_system/features/head_office/case_details/presentation/views/lower_court_case_details.dart';
+import 'package:litigation_management_system/features/settings/presentation/views/settings_placeholder.dart';
 import 'package:litigation_management_system/features/splash/presentation/views/splash_page.dart';
 
 class AppRouter {
@@ -25,9 +30,13 @@ class AppRouter {
   static const String suitFiling = '/customer_360/suit_filing';
   static const String documents = '/customer_360/documents';
   static const String otherInfo = '/customer_360/other';
+  static const String settings = '/settings';
+  static const String lowerCourtCaseDetails = '/head_office/case_details/lower_court';
+  static const String legalAdvisoryCaseDetails = '/head_office/case_details/legal_advisory';
+  static const String hcAdCaseDetails = '/head_office/case_details/hc_ad';
 
-  static Route<dynamic> onGenerateRoute(RouteSettings settings) {
-    switch (settings.name) {
+  static Route<dynamic> onGenerateRoute(RouteSettings routeSettings) {
+    switch (routeSettings.name) {
       case splash:
         return MaterialPageRoute<void>(
           builder: (_) => const SplashPage(),
@@ -60,6 +69,22 @@ class AppRouter {
         return MaterialPageRoute<void>(
           builder: (_) => const OtherInformationPage(),
         );
+      case settings:
+        return MaterialPageRoute<void>(
+          builder: (_) => const SettingsPage(),
+        );
+      case lowerCourtCaseDetails:
+        return MaterialPageRoute<void>(
+          builder: (_) => const LowerCourtCaseDetailsPage(),
+        );
+      case legalAdvisoryCaseDetails:
+        return MaterialPageRoute<void>(
+          builder: (_) => const LegalAdvisoryCaseDetailsPage(),
+        );
+      case hcAdCaseDetails:
+        return MaterialPageRoute<void>(
+          builder: (_) => const HcAdCaseDetailsPage(),
+        );
       case home:
       case dashboard:
         final dataSource = DashboardLocalDataSource();
@@ -68,7 +93,7 @@ class AppRouter {
         final viewModel = DashboardViewModel(getDashboardSummary);
 
         return MaterialPageRoute<void>(
-          builder: (_) => settings.name == dashboard
+          builder: (_) => routeSettings.name == dashboard
               ? DashboardPage(viewModel: viewModel)
               : HomePage(dashboardViewModel: viewModel),
         );

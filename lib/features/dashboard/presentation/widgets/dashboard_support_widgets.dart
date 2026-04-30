@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:litigation_management_system/app/theme/app_color.dart';
 import 'package:litigation_management_system/features/dashboard/domain/entities/dashboard_summary.dart';
 
 class MemoTile extends StatelessWidget {
@@ -17,8 +18,8 @@ class MemoTile extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [
-            Color(0xFF133E7C),
-            Color(0xFF0B5FFF),
+            AppColor.memoGradientStart,
+            AppColor.primary,
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -26,7 +27,7 @@ class MemoTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(18),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x180B5FFF),
+            color: AppColor.primaryGlow,
             blurRadius: 16,
             offset: Offset(0, 8),
           ),
@@ -38,12 +39,12 @@ class MemoTile extends StatelessWidget {
             width: 42,
             height: 42,
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.12),
+              color: AppColor.white.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(14),
             ),
             child: const Icon(
               Icons.description_outlined,
-              color: Colors.white,
+              color: AppColor.white,
             ),
           ),
           const SizedBox(width: 12),
@@ -54,7 +55,7 @@ class MemoTile extends StatelessWidget {
                 Text(
                   item.title,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.white,
+                        color: AppColor.white,
                         fontWeight: FontWeight.w600,
                       ),
                 ),
@@ -62,7 +63,7 @@ class MemoTile extends StatelessWidget {
                 Text(
                   item.date,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Colors.white70,
+                        color: AppColor.white70,
                       ),
                 ),
               ],
@@ -72,7 +73,7 @@ class MemoTile extends StatelessWidget {
           const Icon(
             Icons.arrow_forward_ios_rounded,
             size: 16,
-            color: Colors.white70,
+            color: AppColor.white70,
           ),
         ],
       ),
@@ -138,7 +139,7 @@ class MiniCalendar extends StatelessWidget {
                     day,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                          color: const Color(0xFF64748B),
+                          color: AppColor.textSecondary,
                         ),
                   ),
                 ),
@@ -164,19 +165,19 @@ class MiniCalendar extends StatelessWidget {
             return Container(
               decoration: BoxDecoration(
                 color:
-                    isActive ? const Color(0xFF0B5FFF) : const Color(0xFFF8FBFF),
+                    isActive ? AppColor.primary : AppColor.sectionBg,
                 borderRadius: BorderRadius.circular(14),
                 border: Border.all(
                   color: isActive
-                      ? const Color(0xFF0B5FFF)
-                      : const Color(0xFFE2E8F0),
+                      ? AppColor.primary
+                      : AppColor.borderSoft,
                 ),
               ),
               alignment: Alignment.center,
               child: Text(
                 label,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: isActive ? Colors.white : const Color(0xFF334155),
+                      color: isActive ? AppColor.white : AppColor.textSteel,
                       fontWeight: FontWeight.w700,
                     ),
               ),

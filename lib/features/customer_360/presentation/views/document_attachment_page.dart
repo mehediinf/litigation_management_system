@@ -1,10 +1,19 @@
 //lib/features/customer_360/presentation/views/document_attachment_page.dart
 
 import 'package:flutter/material.dart';
+import 'package:litigation_management_system/app/theme/app_color.dart';
 import 'package:litigation_management_system/features/customer_360/presentation/widgets/customer_360_widgets.dart';
 
-class DocumentAttachmentPage extends StatelessWidget {
+class DocumentAttachmentPage extends StatefulWidget {
   const DocumentAttachmentPage({super.key});
+
+  @override
+  State<DocumentAttachmentPage> createState() => _DocumentAttachmentPageState();
+}
+
+class _DocumentAttachmentPageState extends State<DocumentAttachmentPage> {
+  bool _isCoreDocumentsCollapsed = false;
+  bool _isArjiCopiesCollapsed = false;
 
   static const List<_AttachmentItem> _primaryDocuments = [
     _AttachmentItem(
@@ -124,8 +133,6 @@ class DocumentAttachmentPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final totalCount = _primaryDocuments.length + _arjiCopies.length;
-
     return Customer360Scaffold(
       title: 'Document Attachment',
       body: CustomScrollView(
@@ -138,18 +145,23 @@ class DocumentAttachmentPage extends StatelessWidget {
                 delegate: StickyHeaderDelegate(
                   title: 'Core Documents',
                   icon: Icons.folder_copy_outlined,
+                  onTap: () => setState(
+                    () => _isCoreDocumentsCollapsed = !_isCoreDocumentsCollapsed,
+                  ),
+                  isCollapsed: _isCoreDocumentsCollapsed,
                 ),
               ),
-              SliverPadding(
-                padding: const EdgeInsets.fromLTRB(16, 4, 16, 18),
-                sliver: SliverList.separated(
-                  itemCount: _primaryDocuments.length,
-                  itemBuilder: (context, index) =>
-                      _AttachmentTile(item: _primaryDocuments[index]),
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(height: 10),
+              if (!_isCoreDocumentsCollapsed)
+                SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 18),
+                  sliver: SliverList.separated(
+                    itemCount: _primaryDocuments.length,
+                    itemBuilder: (context, index) =>
+                        _AttachmentTile(item: _primaryDocuments[index]),
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 10),
+                  ),
                 ),
-              ),
             ],
           ),
           SliverMainAxisGroup(
@@ -159,24 +171,29 @@ class DocumentAttachmentPage extends StatelessWidget {
                 delegate: StickyHeaderDelegate(
                   title: 'Arji Copies',
                   icon: Icons.library_books_outlined,
+                  onTap: () => setState(
+                    () => _isArjiCopiesCollapsed = !_isArjiCopiesCollapsed,
+                  ),
+                  isCollapsed: _isArjiCopiesCollapsed,
                 ),
               ),
-              SliverPadding(
-                padding: const EdgeInsets.fromLTRB(16, 4, 16, 26),
-                sliver: SliverGrid(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) =>
-                        _CompactAttachmentCard(item: _arjiCopies[index]),
-                    childCount: _arjiCopies.length,
-                  ),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10,
-                    childAspectRatio: 1.28,
+              if (!_isArjiCopiesCollapsed)
+                SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 26),
+                  sliver: SliverGrid(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) =>
+                          _CompactAttachmentCard(item: _arjiCopies[index]),
+                      childCount: _arjiCopies.length,
+                    ),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                      childAspectRatio: 1.28,
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
         ],
@@ -211,7 +228,7 @@ class _MetricCard extends StatelessWidget {
             width: 34,
             height: 34,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColor.white,
               borderRadius: BorderRadius.circular(11),
             ),
             child: Icon(
@@ -392,14 +409,14 @@ class _StatusBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFF6E8),
+        color: AppColor.warningBg,
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: const Color(0xFFFFE2AE)),
+        border: Border.all(color: AppColor.warningBorder),
       ),
       child: Text(
         label,
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: const Color(0xFF9A6700),
+              color: AppColor.warningText,
               fontSize: 10,
               fontWeight: FontWeight.w700,
             ),
@@ -417,7 +434,7 @@ class _StatusDot extends StatelessWidget {
       width: 10,
       height: 10,
       decoration: const BoxDecoration(
-        color: Color(0xFFFFC857),
+        color: AppColor.warningDot,
         shape: BoxShape.circle,
       ),
     );

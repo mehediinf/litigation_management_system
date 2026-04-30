@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:litigation_management_system/app/theme/app_color.dart';
 
 import '../../../../app/router/app_router.dart';
 
@@ -99,10 +100,10 @@ class _SplashPageState extends State<SplashPage>
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  Color(0xFF061E47),
-                  Color(0xFF0A3A8C),
-                  Color(0xFF0B5BC5),
-                  Color(0xFF2E8FE6),
+                  AppColor.splashBgStart,
+                  AppColor.splashBgMidDark,
+                  AppColor.splashBgMid,
+                  AppColor.splashBgEnd,
                 ],
                 stops: [0.0, 0.38, 0.72, 1.0],
               ),
@@ -125,7 +126,7 @@ class _SplashPageState extends State<SplashPage>
                     right: -100,
                     child: _GlowOrb(
                       size: 340,
-                      color: const Color(0xFF6CC3FF),
+                      color: AppColor.splashOrbTop,
                       opacity: 0.12 +
                           0.04 *
                               math.sin(
@@ -137,7 +138,7 @@ class _SplashPageState extends State<SplashPage>
                     left: -80,
                     child: _GlowOrb(
                       size: 240,
-                      color: const Color(0xFF2E8FE6),
+                      color: AppColor.splashOrbBottom,
                       opacity: 0.16 +
                           0.04 *
                               math.cos(
@@ -167,14 +168,14 @@ class _SplashPageState extends State<SplashPage>
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.08),
+                          color: AppColor.white.withValues(alpha: 0.08),
                           borderRadius: BorderRadius.circular(24),
                           border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.18),
+                            color: AppColor.white.withValues(alpha: 0.18),
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.2),
+                              color: AppColor.black.withValues(alpha: 0.2),
                               blurRadius: 20,
                               offset: const Offset(0, 10),
                             )
@@ -188,7 +189,7 @@ class _SplashPageState extends State<SplashPage>
                               height: 72,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(18),
-                                color: Colors.blue.withValues(alpha: 0.2),
+                                color: AppColor.primary.withValues(alpha: 0.2),
                               ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(18),
@@ -210,7 +211,7 @@ class _SplashPageState extends State<SplashPage>
                                       .textTheme
                                       .titleLarge
                                       ?.copyWith(
-                                    color: Colors.white,
+                                    color: AppColor.white,
                                     fontWeight: FontWeight.w800,
                                     letterSpacing: 0.3,
                                   ),
@@ -221,7 +222,7 @@ class _SplashPageState extends State<SplashPage>
                                       .textTheme
                                       .labelSmall
                                       ?.copyWith(
-                                    color: Colors.white.withValues(alpha: 0.6),
+                                    color: AppColor.white.withValues(alpha: 0.6),
                                     letterSpacing: 2,
                                   ),
                                 ),
@@ -249,7 +250,7 @@ class _SplashPageState extends State<SplashPage>
                                 .textTheme
                                 .headlineMedium
                                 ?.copyWith(
-                              color: Colors.white,
+                              color: AppColor.white,
                               fontWeight: FontWeight.w900,
                               height: 1.2,
                               letterSpacing: -0.5,
@@ -265,7 +266,7 @@ class _SplashPageState extends State<SplashPage>
                                 .textTheme
                                 .bodyMedium
                                 ?.copyWith(
-                              color: Colors.white.withValues(alpha: 0.65),
+                              color: AppColor.white.withValues(alpha: 0.65),
                               height: 1.6,
                             ),
                           ),
@@ -287,9 +288,9 @@ class _SplashPageState extends State<SplashPage>
                           height: 22,
                           child: CircularProgressIndicator(
                             strokeWidth: 2.5,
-                            color: Colors.white,
+                            color: AppColor.white,
                             backgroundColor:
-                            Colors.white.withValues(alpha: 0.2),
+                            AppColor.white.withValues(alpha: 0.2),
                           ),
                         ),
 
@@ -304,7 +305,7 @@ class _SplashPageState extends State<SplashPage>
                                   .textTheme
                                   .bodyMedium
                                   ?.copyWith(
-                                color: Colors.white.withValues(alpha: 0.75),
+                                color: AppColor.white.withValues(alpha: 0.75),
                               ),
                             ),
                             const SizedBox(width: 6),
@@ -346,7 +347,7 @@ class _AnimatedDots extends StatelessWidget {
               width: 3,
               height: 3,
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: opacity),
+                color: AppColor.white.withValues(alpha: opacity),
                 shape: BoxShape.circle,
               ),
             );
@@ -388,7 +389,7 @@ class _GridPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.white.withValues(alpha: 0.03)
+      ..color = AppColor.white.withValues(alpha: 0.03)
       ..strokeWidth = 0.8;
 
     const step = 32.0;

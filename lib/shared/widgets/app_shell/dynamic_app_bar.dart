@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:litigation_management_system/app/theme/app_color.dart';
 
 class DynamicAppBar extends StatelessWidget implements PreferredSizeWidget {
   const DynamicAppBar({
@@ -19,22 +20,22 @@ class DynamicAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       toolbarHeight: 66,
-      backgroundColor: const Color(0xFFEAF2FF),
-      surfaceTintColor: Colors.transparent,
-      shadowColor: const Color(0x120F3D91),
+      backgroundColor: AppColor.dynamicAppBarBg,
+      surfaceTintColor: AppColor.transparent,
+      shadowColor: AppColor.dynamicAppBarShadowColor,
       elevation: 1,
       shape: const Border(
         bottom: BorderSide(
-          color: Color(0xFFD7E5F7),
+          color: AppColor.dynamicAppBarBorder,
           width: 1,
         ),
       ),
       iconTheme: const IconThemeData(
-        color: Color(0xFF214A84),
+        color: AppColor.dynamicAppBarIcon,
         size: 22,
       ),
       actionsIconTheme: const IconThemeData(
-        color: Color(0xFF214A84),
+        color: AppColor.dynamicAppBarIcon,
         size: 22,
       ),
       titleSpacing: 0,
@@ -46,16 +47,10 @@ class DynamicAppBar extends StatelessWidget implements PreferredSizeWidget {
                 height: 40,
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFDFEFF),
+                  color: AppColor.dynamicAppBarLogoBg,
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: const Color(0xFFC9DAF8)),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color(0x120B5FFF),
-                      blurRadius: 12,
-                      offset: Offset(0, 4),
-                    ),
-                  ],
+                  border: Border.all(color: AppColor.dynamicAppBarLogoBorder),
+                  boxShadow: AppColor.dynamicAppBarShadow,
                 ),
                 child: Image.asset(
                   'assets/images/lms_logo1.png',
@@ -74,7 +69,7 @@ class DynamicAppBar extends StatelessWidget implements PreferredSizeWidget {
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.w700,
                             fontSize: 19,
-                            color: const Color(0xFF16345C),
+                            color: AppColor.dynamicAppBarTitle,
                           ),
                     ),
                     Text(
@@ -82,7 +77,7 @@ class DynamicAppBar extends StatelessWidget implements PreferredSizeWidget {
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             fontSize: 11,
-                            color: const Color(0xFF5D7FAF),
+                            color: AppColor.dynamicAppBarSubtitle,
                             fontWeight: FontWeight.w600,
                           ),
                     ),

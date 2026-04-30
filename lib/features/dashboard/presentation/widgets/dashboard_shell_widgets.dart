@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:litigation_management_system/app/theme/app_color.dart';
 import 'package:litigation_management_system/features/dashboard/domain/entities/dashboard_summary.dart';
 
 class DashboardHeaderSection extends StatelessWidget {
@@ -20,18 +21,18 @@ class DashboardHeaderSection extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [
-            Color(0xFFF8FBFF),
-            Color(0xFFEAF3FF),
-            Color(0xFFF7FAFC),
+            AppColor.sectionBg,
+            AppColor.sectionBgBlue,
+            AppColor.sectionBgAlt,
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: const Color(0xFFDCE6F5)),
+        border: Border.all(color: AppColor.panelBorder),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x120F172A),
+            color: AppColor.subtleShadow,
             blurRadius: 24,
             offset: Offset(0, 12),
           ),
@@ -67,7 +68,7 @@ class _HeaderCopy extends StatelessWidget {
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 fontSize: isSmall ? 26 : 30,
                 fontWeight: FontWeight.w800,
-                color: const Color(0xFF102A43),
+                color: AppColor.textDeepBlue,
                 height: 1.05,
               ),
         ),
@@ -77,7 +78,7 @@ class _HeaderCopy extends StatelessWidget {
           child: Text(
             subtitle,
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: const Color(0xFF526377),
+                  color: AppColor.dashboardTextMutedAlt,
                   height: 1.5,
                 ),
           ),
@@ -144,21 +145,15 @@ class _DashboardSearchDialogState extends State<DashboardSearchDialog> {
 
     return Dialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 24),
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColor.transparent,
       child: Container(
         constraints: const BoxConstraints(maxWidth: 720),
         padding: const EdgeInsets.all(22),
         decoration: BoxDecoration(
-          color: const Color(0xFFFDFEFF),
+          color: AppColor.panelBg,
           borderRadius: BorderRadius.circular(28),
-          border: Border.all(color: const Color(0xFFDCE6F5)),
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0x220F172A),
-              blurRadius: 28,
-              offset: Offset(0, 18),
-            ),
-          ],
+          border: Border.all(color: AppColor.panelBorder),
+          boxShadow: AppColor.overlayShadowList,
         ),
         child: SingleChildScrollView(
           child: Column(
@@ -173,15 +168,15 @@ class _DashboardSearchDialogState extends State<DashboardSearchDialog> {
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
                         colors: [
-                          Color(0xFFDCEBFF),
-                          Color(0xFFF0F6FF),
+                          AppColor.cardGradientStart,
+                          AppColor.cardGradientEnd,
                         ],
                       ),
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: const Icon(
                       Icons.search_rounded,
-                      color: Color(0xFF0B5FFF),
+                      color: AppColor.primary,
                     ),
                   ),
                   const SizedBox(width: 14),
@@ -193,7 +188,7 @@ class _DashboardSearchDialogState extends State<DashboardSearchDialog> {
                           'Search Filters',
                           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                                 fontWeight: FontWeight.w800,
-                                color: const Color(0xFF102A43),
+                                color: AppColor.textDeepBlue,
                               ),
                         ),
                       ],
@@ -264,9 +259,9 @@ class _DashboardSearchDialogState extends State<DashboardSearchDialog> {
                         });
                       },
                       style: OutlinedButton.styleFrom(
-                        foregroundColor: const Color(0xFF214A84),
+                        foregroundColor: AppColor.dynamicAppBarIcon,
                         padding: const EdgeInsets.symmetric(vertical: 14),
-                        side: const BorderSide(color: Color(0xFFD0DCF0)),
+                        side: const BorderSide(color: AppColor.outlineBorder),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
@@ -281,8 +276,8 @@ class _DashboardSearchDialogState extends State<DashboardSearchDialog> {
                       icon: const Icon(Icons.search_rounded, size: 18),
                       label: const Text('Apply Filters'),
                       style: FilledButton.styleFrom(
-                        backgroundColor: const Color(0xFF0B5FFF),
-                        foregroundColor: Colors.white,
+                        backgroundColor: AppColor.primary,
+                        foregroundColor: AppColor.white,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
@@ -325,7 +320,7 @@ class _SearchDropdownField extends StatelessWidget {
           Text(
             label,
             style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: const Color(0xFF334155),
+                  color: AppColor.textSteel,
                   fontWeight: FontWeight.w700,
                 ),
           ),
@@ -344,23 +339,23 @@ class _SearchDropdownField extends StatelessWidget {
             icon: const Icon(Icons.keyboard_arrow_down_rounded),
             decoration: InputDecoration(
               filled: true,
-              fillColor: const Color(0xFFF8FBFF),
+              fillColor: AppColor.sectionBg,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 16,
                 vertical: 14,
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: const BorderSide(color: Color(0xFFD8E5F5)),
+                borderSide: const BorderSide(color: AppColor.fieldBorder),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: const BorderSide(color: Color(0xFFD8E5F5)),
+                borderSide: const BorderSide(color: AppColor.fieldBorder),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
                 borderSide: const BorderSide(
-                  color: Color(0xFF0B5FFF),
+                  color: AppColor.primary,
                   width: 1.3,
                 ),
               ),
@@ -387,9 +382,9 @@ class DashboardHeroSummary extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [
-            Color(0xFF0A2A66),
-            Color(0xFF0B5FFF),
-            Color(0xFF4FA4FF),
+            AppColor.drawerGradientStart,
+            AppColor.primary,
+            AppColor.dashboardHeroEnd,
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -397,7 +392,7 @@ class DashboardHeroSummary extends StatelessWidget {
         borderRadius: BorderRadius.circular(30),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x220B5FFF),
+            color: AppColor.primaryShadow,
             blurRadius: 24,
             offset: Offset(0, 12),
           ),
@@ -409,14 +404,14 @@ class DashboardHeroSummary extends StatelessWidget {
           Text(
             'Total monitored cases',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.white70,
+                  color: AppColor.white70,
                 ),
           ),
           const SizedBox(height: 8),
           Text(
             '${summary.liveCaseInformation.last.value.toInt()}',
             style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                  color: Colors.white,
+                  color: AppColor.white,
                   fontWeight: FontWeight.w800,
                 ),
           ),
@@ -459,7 +454,7 @@ class _HeroPill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.08),
+        color: AppColor.white.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(18),
       ),
       child: Column(
@@ -468,14 +463,14 @@ class _HeroPill extends StatelessWidget {
           Text(
             label,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Colors.white70,
+                  color: AppColor.white70,
                 ),
           ),
           const SizedBox(height: 8),
           Text(
             value,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: Colors.white,
+                  color: AppColor.white,
                   fontWeight: FontWeight.w700,
                 ),
           ),
@@ -510,29 +505,29 @@ class DashboardSectionTitle extends StatelessWidget {
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
                   colors: [
-                    Color(0xFFDCEBFF),
-                    Color(0xFFF2F7FF),
+                    AppColor.cardGradientStart,
+                    AppColor.softBlueAlt,
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
                 borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: const Color(0xFFD8E5F5)),
+                border: Border.all(color: AppColor.fieldBorder),
               ),
               child: Icon(
                 icon,
                 size: 20,
-                color: const Color(0xFF0B5FFF),
+                color: AppColor.primary,
               ),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: Text(
-                title,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w800,
-                      color: const Color(0xFF0F172A),
-                    ),
+                    title,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w800,
+                          color: AppColor.textPrimary,
+                        ),
               ),
             ),
           ],
@@ -543,7 +538,7 @@ class DashboardSectionTitle extends StatelessWidget {
           child: Text(
             subtitle,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: const Color(0xFF64748B),
+                  color: AppColor.textSecondary,
                 ),
           ),
         ),
@@ -577,12 +572,12 @@ class DashboardMetricCard extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: const Color(0xFFFDFEFF),
+            color: AppColor.panelBg,
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: const Color(0xFFE2E8F0)),
+            border: Border.all(color: AppColor.borderSoft),
             boxShadow: const [
               BoxShadow(
-                color: Color(0x0D0F172A),
+                color: AppColor.cardShadow,
                 blurRadius: 18,
                 offset: Offset(0, 8),
               ),
@@ -611,7 +606,7 @@ class DashboardMetricCard extends StatelessWidget {
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.w800,
                     fontSize: isCompact ? 25 : null,
-                    color: const Color(0xFF0F172A),
+                    color: AppColor.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 6),
@@ -640,7 +635,7 @@ class DashboardMetricCard extends StatelessWidget {
                   maxLines: showValue ? 3 : 4,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: const Color(0xFF64748B),
+                    color: AppColor.textSecondary,
                     fontSize: isCompact ? 13 : null,
                     height: 1.25,
                   ),
@@ -707,12 +702,12 @@ class DashboardPanelCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: const Color(0xFFFDFEFF),
+        color: AppColor.panelBg,
         borderRadius: BorderRadius.circular(26),
-        border: Border.all(color: const Color(0xFFE2E8F0)),
+        border: Border.all(color: AppColor.borderSoft),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x0D0F172A),
+            color: AppColor.cardShadow,
             blurRadius: 18,
             offset: Offset(0, 8),
           ),
@@ -724,9 +719,9 @@ class DashboardPanelCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
             decoration: BoxDecoration(
-              color: const Color(0xFFF8FBFF),
+              color: AppColor.sectionBg,
               borderRadius: BorderRadius.circular(18),
-              border: Border.all(color: const Color(0xFFE2E8F0)),
+              border: Border.all(color: AppColor.borderSoft),
             ),
             child: Row(
               children: [
@@ -736,8 +731,8 @@ class DashboardPanelCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
                       colors: [
-                        Color(0xFFDCEBFF),
-                        Color(0xFFF0F6FF),
+                        AppColor.cardGradientStart,
+                        AppColor.cardGradientEnd,
                       ],
                     ),
                     borderRadius: BorderRadius.circular(12),
@@ -745,7 +740,7 @@ class DashboardPanelCard extends StatelessWidget {
                   child: Icon(
                     icon,
                     size: 19,
-                    color: const Color(0xFF0B5FFF),
+                    color: AppColor.primary,
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -754,7 +749,7 @@ class DashboardPanelCard extends StatelessWidget {
                     title,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.w800,
-                          color: const Color(0xFF0F172A),
+                          color: AppColor.textPrimary,
                         ),
                   ),
                 ),

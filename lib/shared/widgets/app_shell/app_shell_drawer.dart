@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:litigation_management_system/app/theme/app_color.dart';
 
 class DrawerDestinationItem {
   const DrawerDestinationItem({
     required this.title,
     required this.icon,
     this.subtitle,
+    this.isDestructive = false,
   });
 
   final String title;
   final IconData icon;
   final String? subtitle;
+  final bool isDestructive;
 }
 
 class DrawerMenuNode {
@@ -43,7 +46,7 @@ class AppShellDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: const Color(0xFFF3F7FB),
+      backgroundColor: AppColor.drawerBg,
       child: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,16 +59,16 @@ class AppShellDrawer extends StatelessWidget {
                 borderRadius: BorderRadius.circular(24),
                 gradient: const LinearGradient(
                   colors: [
-                    Color(0xFF0A2A66),
-                    Color(0xFF0B5FFF),
-                    Color(0xFF56A5FF),
+                    AppColor.drawerGradientStart,
+                    AppColor.drawerGradientMiddle,
+                    AppColor.drawerGradientEnd,
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
                 boxShadow: const [
                   BoxShadow(
-                    color: Color(0x220F3D91),
+                    color: AppColor.drawerHeroShadowColor,
                     blurRadius: 28,
                     offset: Offset(0, 16),
                   ),
@@ -81,10 +84,10 @@ class AppShellDrawer extends StatelessWidget {
                         height: 54,
                         padding: const EdgeInsets.all(9),
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.16),
+                          color: AppColor.white.withValues(alpha: 0.16),
                           borderRadius: BorderRadius.circular(18),
                           border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.18),
+                            color: AppColor.white.withValues(alpha: 0.18),
                           ),
                         ),
                         child: Image.asset(
@@ -99,14 +102,14 @@ class AppShellDrawer extends StatelessWidget {
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.14),
+                          color: AppColor.white.withValues(alpha: 0.14),
                           borderRadius: BorderRadius.circular(999),
                         ),
                         child: Text(
                           'User Name',
                           style:
                               Theme.of(context).textTheme.labelMedium?.copyWith(
-                                    color: Colors.white,
+                                    color: AppColor.white,
                                     fontWeight: FontWeight.w700,
                                   ),
                         ),
@@ -117,7 +120,7 @@ class AppShellDrawer extends StatelessWidget {
                   Text(
                     'Litigation Management',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: Colors.white,
+                          color: AppColor.white,
                           fontWeight: FontWeight.w800,
                           letterSpacing: -0.2,
                         ),
@@ -126,7 +129,7 @@ class AppShellDrawer extends StatelessWidget {
                   Text(
                     'Smart access to Legal Team and Head Office modules with a cleaner operational layout.',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.white.withValues(alpha: 0.88),
+                          color: AppColor.white.withValues(alpha: 0.88),
                           height: 1.55,
                         ),
                   ),
@@ -153,7 +156,7 @@ class AppShellDrawer extends StatelessWidget {
                     child: Text(
                       'Quick Access',
                       style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                            color: const Color(0xFF475569),
+                            color: AppColor.textSlate,
                             fontWeight: FontWeight.w700,
                             letterSpacing: 0.3,
                           ),
@@ -172,16 +175,20 @@ class AppShellDrawer extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18),
                         ),
-                        tileColor: const Color(0xFFFFFFFF),
+                        tileColor: AppColor.white,
                         leading: Icon(
                           item.icon,
-                          color: const Color(0xFF0B5FFF),
+                          color: item.isDestructive
+                              ? AppColor.error
+                              : AppColor.primary,
                         ),
                         title: Text(
                           item.title,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontWeight: FontWeight.w600,
-                            color: Color(0xFF0F172A),
+                            color: item.isDestructive
+                                ? AppColor.error
+                                : AppColor.textPrimary,
                           ),
                         ),
                         subtitle: item.subtitle == null
@@ -192,13 +199,13 @@ class AppShellDrawer extends StatelessWidget {
                                     .textTheme
                                     .bodySmall
                                     ?.copyWith(
-                                      color: const Color(0xFF64748B),
+                                      color: AppColor.textSecondary,
                                     ),
                               ),
                         trailing: const Icon(
                           Icons.arrow_forward_ios_rounded,
                           size: 15,
-                          color: Color(0xFF94A3B8),
+                          color: AppColor.textMuted,
                         ),
                         onTap: () {
                           Navigator.of(context).pop();
@@ -215,16 +222,10 @@ class AppShellDrawer extends StatelessWidget {
               margin: const EdgeInsets.fromLTRB(16, 4, 16, 16),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColor.white,
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: const Color(0xFFE2E8F0)),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color(0x0A0F172A),
-                    blurRadius: 14,
-                    offset: Offset(0, 8),
-                  ),
-                ],
+                border: Border.all(color: AppColor.borderSoft),
+                boxShadow: AppColor.elevatedShadow,
               ),
               child: Row(
                 children: [
@@ -232,13 +233,13 @@ class AppShellDrawer extends StatelessWidget {
                     width: 36,
                     height: 36,
                     decoration: BoxDecoration(
-                      color: const Color(0xFFEFF4FF),
+                      color: AppColor.drawerInfoBg,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: const Icon(
                       Icons.info_outline_rounded,
                       size: 20,
-                      color: Color(0xFF0B5FFF),
+                      color: AppColor.primary,
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -250,7 +251,7 @@ class AppShellDrawer extends StatelessWidget {
                         Text(
                           'App Version',
                           style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                                color: const Color(0xFF64748B),
+                                color: AppColor.textSecondary,
                                 fontWeight: FontWeight.w600,
                               ),
                         ),
@@ -258,7 +259,7 @@ class AppShellDrawer extends StatelessWidget {
                         Text(
                           appVersion,
                           style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                color: const Color(0xFF0F172A),
+                                color: AppColor.textPrimary,
                                 fontWeight: FontWeight.w700,
                               ),
                         ),
@@ -292,9 +293,9 @@ class _DrawerTreeTile extends StatelessWidget {
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: 6),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColor.white,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFF1F5F9)),
+          border: Border.all(color: AppColor.drawerCardBorder),
         ),
         child: ListTile(
           dense: true,
@@ -306,16 +307,19 @@ class _DrawerTreeTile extends StatelessWidget {
           leading: Icon(
             level == 0 ? node.icon : Icons.arrow_right_rounded,
             size: level == 0 ? 20 : 18,
-            color: const Color(0xFF64748B),
+            color: AppColor.textSecondary,
           ),
           title: Text(
             node.title,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: const Color(0xFF1E293B),
+                  color: AppColor.textDark,
                   fontWeight: FontWeight.w500,
                 ),
           ),
-          onTap: () => onLeafTap(node.title),
+          onTap: () {
+            Navigator.of(context).pop();
+            onLeafTap(node.title);
+          },
         ),
       );
     }
@@ -324,23 +328,17 @@ class _DrawerTreeTile extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColor.white,
         borderRadius: BorderRadius.circular(isPrimarySection ? 24 : 20),
         border: Border.all(
           color: isPrimarySection
-              ? const Color(0xFFDCE6F5)
-              : const Color(0xFFF1F5F9),
+              ? AppColor.drawerPrimaryBorder
+              : AppColor.drawerCardBorder,
         ),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x080F172A),
-            blurRadius: 14,
-            offset: Offset(0, 8),
-          ),
-        ],
+        boxShadow: AppColor.elevatedShadow,
       ),
       child: Theme(
-        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+        data: Theme.of(context).copyWith(dividerColor: AppColor.transparent),
         child: ExpansionTile(
           key: PageStorageKey<String>('${node.title}_$level'),
           tilePadding: EdgeInsets.only(
@@ -358,19 +356,19 @@ class _DrawerTreeTile extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(isPrimarySection ? 24 : 20),
           ),
-          iconColor: const Color(0xFF0B5FFF),
-          collapsedIconColor: const Color(0xFF64748B),
+          iconColor: AppColor.primary,
+          collapsedIconColor: AppColor.textSecondary,
           initiallyExpanded: false,
           leading: Icon(
             node.icon,
             color: isPrimarySection
-                ? const Color(0xFF0B5FFF)
-                : const Color(0xFF64748B),
+                ? AppColor.primary
+                : AppColor.textSecondary,
           ),
           title: Text(
             node.title,
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  color: const Color(0xFF0F172A),
+                  color: AppColor.textPrimary,
                   fontWeight:
                       isPrimarySection ? FontWeight.w700 : FontWeight.w600,
                 ),
