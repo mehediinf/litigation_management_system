@@ -12,6 +12,12 @@ import 'package:litigation_management_system/shared/widgets/app_shell/app_shell_
 import 'package:litigation_management_system/shared/widgets/app_shell/dynamic_app_bar.dart';
 
 import '../../../customer_360/presentation/views/customer_360_page.dart';
+import '../../../head_office/supreme_court_matter/presentation/views/arising_from_original_case.dart';
+import '../../../head_office/supreme_court_matter/presentation/views/bill_expenses.dart';
+import '../../../head_office/supreme_court_matter/presentation/views/billing.dart';
+import '../../../head_office/supreme_court_matter/presentation/views/case_details.dart';
+import '../../../head_office/supreme_court_matter/presentation/views/case_filling.dart';
+import '../../../head_office/supreme_court_matter/presentation/views/case_status_update.dart';
 import '../../../head_office/view_pending_bill/presentation/views/view_pending_bill_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -187,6 +193,55 @@ class _HomePageState extends State<HomePage> {
       case 'HC/AD Case Details':
         Navigator.of(context).pushNamed(AppRouter.hcAdCaseDetails);
         return;
+
+      case 'Case Filling':
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => const CaseFillingPage(),
+          ),
+        );
+        return;
+
+      case 'Arising From Original Case':
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => const ArisingFromOriginalCasePage(),
+          ),
+        );
+        return;
+
+      case 'Case Status Update':
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => const CaseStatusUpdatePage(),
+          ),
+        );
+        return;
+
+      case 'Billing':
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => const BillingPage(),
+          ),
+        );
+        return;
+
+      case 'Case Details':
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => const CaseDetailsPage(),
+          ),
+        );
+        return;
+
+      case 'Bill Expenses':
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => const BillExpensesPage(),
+          ),
+        );
+      return;
+
       default:
         _showInfoSnackBar('$title module is ready for dynamic page wiring.');
     }
