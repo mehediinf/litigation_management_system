@@ -13,7 +13,6 @@ import 'package:litigation_management_system/shared/widgets/app_shell/dynamic_ap
 
 import '../../../customer_360/presentation/views/customer_360_page.dart';
 import '../../../head_office/supreme_court_matter/presentation/views/arising_from_original_case.dart';
-import '../../../head_office/supreme_court_matter/presentation/views/bill_expenses.dart';
 import '../../../head_office/supreme_court_matter/presentation/views/billing.dart';
 import '../../../head_office/supreme_court_matter/presentation/views/case_details.dart';
 import '../../../head_office/supreme_court_matter/presentation/views/case_filling.dart';
@@ -142,7 +141,6 @@ class _HomePageState extends State<HomePage> {
             DrawerMenuNode(title: 'Case Status Update'),
             DrawerMenuNode(title: 'Billing'),
             DrawerMenuNode(title: 'Case Details'),
-            DrawerMenuNode(title: 'Bill Expenses'),
           ],
         ),
         DrawerMenuNode(
@@ -233,14 +231,6 @@ class _HomePageState extends State<HomePage> {
           ),
         );
         return;
-
-      case 'Bill Expenses':
-        Navigator.of(context).push(
-          MaterialPageRoute<void>(
-            builder: (_) => const BillExpensesPage(),
-          ),
-        );
-      return;
 
       default:
         _showInfoSnackBar('$title module is ready for dynamic page wiring.');
