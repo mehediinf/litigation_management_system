@@ -11,6 +11,7 @@ import 'case_file/case_file_action_reassign_file_page.dart';
 import 'case_file/case_file_action_send_to_checker_page.dart';
 import 'case_file/case_file_action_update_next_date_page.dart';
 import 'case_file/case_file_action_verify_page.dart';
+import 'case_file/new_case_file.dart';
 
 class CaseFilePage extends StatefulWidget {
   const CaseFilePage({super.key});
@@ -307,6 +308,7 @@ class _FormTabState extends State<_FormTab> {
             ),
           ),
           const SizedBox(height: 20),
+          // Search and New
           Row(
             children: [
               Expanded(
@@ -334,9 +336,46 @@ class _FormTabState extends State<_FormTab> {
                   ),
                 ),
               ),
-              const SizedBox(height: 120),
             ],
           ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const NewCaseFilePage(),
+                      ),
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.add_rounded,
+                    color: Color(0xFFFFFFFF),
+                    size: 18,
+                  ),
+                  label: const Text(
+                    'New',
+                    style: TextStyle(color: Color(0xFFFFFFFF)),
+                  ),
+                  style: FilledButton.styleFrom(
+                    backgroundColor: const Color(0xFF059669),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    textStyle: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 120),
         ],
       ),
     );

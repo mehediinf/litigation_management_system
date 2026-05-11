@@ -1,3 +1,5 @@
+//lib/features/legal_team/warrant_of_arrest/presentation/views/warrant_settled.dart
+
 import 'package:flutter/material.dart';
 
 class SettledPage extends StatelessWidget {
