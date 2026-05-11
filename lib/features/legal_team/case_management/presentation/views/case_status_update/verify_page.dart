@@ -1,12 +1,7 @@
-// lib/features/head_office/supreme_court_matter/presentation/views/case_filling_action_send_to_checker_page.dart
-
 import 'package:flutter/material.dart';
 
-class ArisingActionSendToCheckerPage extends StatelessWidget {
-  const ArisingActionSendToCheckerPage({
-    super.key,
-    this.caseData,
-  });
+class VerifyPage extends StatelessWidget {
+  const VerifyPage({super.key, this.caseData});
 
   final Map<String, dynamic>? caseData;
 
@@ -30,7 +25,7 @@ class ArisingActionSendToCheckerPage extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: const Text(
-          'Send to Checker',
+          'Verify',
           style: TextStyle(fontWeight: FontWeight.w700, fontSize: 17),
         ),
       ),

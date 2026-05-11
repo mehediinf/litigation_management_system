@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ArisingActionApproveReassignPage extends StatelessWidget {
-  const ArisingActionApproveReassignPage({super.key, this.caseData});
+class CaseFileActionApproveReassignPage extends StatelessWidget {
+  const CaseFileActionApproveReassignPage({super.key, this.caseData});
 
   final Map<String, dynamic>? caseData;
 

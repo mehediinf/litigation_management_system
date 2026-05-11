@@ -12,18 +12,36 @@ import 'package:litigation_management_system/shared/widgets/app_shell/app_shell_
 import 'package:litigation_management_system/shared/widgets/app_shell/dynamic_app_bar.dart';
 
 import '../../../customer_360/presentation/views/customer_360_page.dart';
+
 import '../../../head_office/supreme_court_matter/presentation/views/arising_from_original_case.dart';
 import '../../../head_office/supreme_court_matter/presentation/views/billing.dart';
 import '../../../head_office/supreme_court_matter/presentation/views/case_details.dart';
 import '../../../head_office/supreme_court_matter/presentation/views/case_filling.dart';
 import '../../../head_office/supreme_court_matter/presentation/views/case_status_update.dart';
+
 import '../../../head_office/view_pending_bill/presentation/views/view_pending_bill_page.dart';
 
+import '../../../legal_team/appeal_and_bail_money/presentation/views/appeal_data_details.dart';
+import '../../../legal_team/appeal_and_bail_money/presentation/views/appeal_deposit_withdraw.dart';
+import '../../../legal_team/appeal_and_bail_money/presentation/views/appeal_hearing_bill.dart';
+
+import '../../../legal_team/case_management/presentation/views/case_manage_arising_from_original_case.dart';
+import '../../../legal_team/case_management/presentation/views/case_manage_authorization_request.dart';
+import '../../../legal_team/case_management/presentation/views/case_manage_case_details_info.dart';
+
+import '../../../legal_team/case_management/presentation/views/case_manage_case_status_update.dart';
+import '../../../legal_team/compliance_regulatory_case/presentation/views/compliance_arising_from_original_case.dart';
+import '../../../legal_team/compliance_regulatory_case/presentation/views/compliance_case_details.dart';
+import '../../../legal_team/compliance_regulatory_case/presentation/views/compliance_case_file.dart';
+
+import '../../../legal_team/compliance_regulatory_case/presentation/views/compliance_case_status_update.dart';
+import '../../../legal_team/warrant_of_arrest/presentation/views/warrant_executed_incentive.dart';
+import '../../../legal_team/warrant_of_arrest/presentation/views/warrant_of_arrest_process.dart';
+import '../../../legal_team/warrant_of_arrest/presentation/views/warrant_pending_incentive.dart';
+import '../../../legal_team/warrant_of_arrest/presentation/views/warrant_settled.dart';
+
 class HomePage extends StatefulWidget {
-  const HomePage({
-    super.key,
-    required this.dashboardViewModel,
-  });
+  const HomePage({super.key, required this.dashboardViewModel});
 
   final DashboardViewModel dashboardViewModel;
 
@@ -82,20 +100,20 @@ class _HomePageState extends State<HomePage> {
           title: 'Case Management',
           icon: Icons.folder_copy_outlined,
           children: [
-            DrawerMenuNode(title: 'Arising From Original Case'),
-            DrawerMenuNode(title: 'Case Status Update'),
-            DrawerMenuNode(title: 'Case Details Info'),
-            DrawerMenuNode(title: 'Authorization Request'),
+            DrawerMenuNode(title: 'Case Management Arising From Original Case'),
+            DrawerMenuNode(title: 'Case Management Case Status Update'),
+            DrawerMenuNode(title: 'Case Management Case Details Info'),
+            DrawerMenuNode(title: 'Case Management Authorization Request'),
           ],
         ),
         DrawerMenuNode(
           title: 'Compliance & Regulatory Case',
           icon: Icons.verified_outlined,
           children: [
-            DrawerMenuNode(title: 'Case File'),
-            DrawerMenuNode(title: 'Arising From Original Case'),
-            DrawerMenuNode(title: 'Case Status Update'),
-            DrawerMenuNode(title: 'Case Details'),
+            DrawerMenuNode(title: 'Compliance Case File'),
+            DrawerMenuNode(title: 'Compliance Arising From Original Case'),
+            DrawerMenuNode(title: 'Compliance Case Status Update'),
+            DrawerMenuNode(title: 'Compliance Case Details'),
           ],
         ),
         DrawerMenuNode(
@@ -103,22 +121,24 @@ class _HomePageState extends State<HomePage> {
           icon: Icons.gavel_outlined,
           children: [
             DrawerMenuNode(title: 'Warrant Of Arrest Process'),
-            DrawerMenuNode(title: 'Settled'),
-            DrawerMenuNode(title: 'Pending Incentive'),
-            DrawerMenuNode(title: 'Executed Incentive'),
+            DrawerMenuNode(title: 'Warrant Settled'),
+            DrawerMenuNode(title: 'Warrant Pending Incentive'),
+            DrawerMenuNode(title: 'Warrant Executed Incentive'),
           ],
         ),
         DrawerMenuNode(
           title: 'Appeal and Bail Money',
           icon: Icons.account_balance_outlined,
           children: [
-            DrawerMenuNode(title: 'Deposit & Withdraw'),
-            DrawerMenuNode(title: 'Hearing Bill'),
-            DrawerMenuNode(title: 'Data Details'),
+            DrawerMenuNode(title: 'Appeal Deposit & Withdraw'),
+            DrawerMenuNode(title: 'Appeal Hearing Bill'),
+            DrawerMenuNode(title: 'Appeal Data Details'),
           ],
         ),
       ],
     ),
+
+    // Head Office
     const DrawerMenuNode(
       title: 'Head Office',
       icon: Icons.business_outlined,
@@ -155,8 +175,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _currentIndex = index;
       _isLegalCostSearchMode = index == 1 ? _isLegalCostSearchMode : false;
-      _isCustomer360SearchMode =
-          index == 2 ? _isCustomer360SearchMode : false;
+      _isCustomer360SearchMode = index == 2 ? _isCustomer360SearchMode : false;
     });
   }
 
@@ -177,9 +196,7 @@ class _HomePageState extends State<HomePage> {
         return;
       case 'View Pending Bill':
         Navigator.of(context).push(
-          MaterialPageRoute<void>(
-            builder: (_) => const ViewPendingBillPage(),
-          ),
+          MaterialPageRoute<void>(builder: (_) => const ViewPendingBillPage()),
         );
         return;
       case 'Lower Court Case Details':
@@ -192,14 +209,122 @@ class _HomePageState extends State<HomePage> {
         Navigator.of(context).pushNamed(AppRouter.hcAdCaseDetails);
         return;
 
-      case 'Case Filling':
+      // Legal Team -> Case Management
+
+      case 'Case Management Arising From Original Case':
         Navigator.of(context).push(
           MaterialPageRoute<void>(
-            builder: (_) => const CaseFillingPage(),
+            builder: (_) => const CaseManageArisingFromOriginalCasePage(),
+          ),
+        );
+        return;
+      case 'Case Management Case Status Update':
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => const CaseManagementCaseStatusUpdatePage(),
+          ),
+        );
+        return;
+      case 'Case Management Case Details Info':
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => const CaseManagementCaseDetailsInfoPage(),
+          ),
+        );
+        return;
+      case 'Case Management Authorization Request':
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => const CaseManagementAuthorizationRequestPage(),
           ),
         );
         return;
 
+      // Legal Team -> Compliance & Regulatory Case
+      case 'Compliance Case File':
+        Navigator.of(
+          context,
+        ).push(MaterialPageRoute<void>(builder: (_) => const CaseFilePage()));
+        return;
+
+      case 'Compliance Arising From Original Case':
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => const ComplianceArisingFromOriginalCasePage(),
+          ),
+        );
+        return;
+
+      case 'Compliance Case Status Update':
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => const ComplianceCaseStatusUpdatePage(),
+          ),
+        );
+        return;
+      case 'Compliance Case Details':
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => const ComplianceCaseDetailsPage(),
+          ),
+        );
+        return;
+
+      // Legal Team -> Warrant Of Arrest
+      case 'Warrant Of Arrest Process':
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => const WarrantOfArrestProcessPage(),
+          ),
+        );
+        return;
+      case 'Warrant Settled':
+        Navigator.of(
+          context,
+        ).push(MaterialPageRoute<void>(builder: (_) => const SettledPage()));
+        return;
+      case 'Warrant Pending Incentive':
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(builder: (_) => const PendingIncentivePage()),
+        );
+        return;
+      case 'Warrant Executed Incentive':
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => const ExecutedIncentivePage(),
+          ),
+        );
+        return;
+
+      // Legal Team -> Appeal and Bail Money
+      case 'Appeal Deposit & Withdraw':
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => const AppealDepositWithdrawPage(),
+          ),
+        );
+        return;
+      case 'Appeal Hearing Bill':
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => const AppealHearingBillPage(),
+          ),
+        );
+        return;
+      case 'Appeal Data Details':
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => const AppealDataDetailsPage(),
+          ),
+        );
+        return;
+
+      // Head Office -> Supreme Court Matter
+      case 'Case Filling':
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(builder: (_) => const CaseFillingPage()),
+        );
+        return;
       case 'Arising From Original Case':
         Navigator.of(context).push(
           MaterialPageRoute<void>(
@@ -207,28 +332,19 @@ class _HomePageState extends State<HomePage> {
           ),
         );
         return;
-
       case 'Case Status Update':
         Navigator.of(context).push(
-          MaterialPageRoute<void>(
-            builder: (_) => const CaseStatusUpdatePage(),
-          ),
+          MaterialPageRoute<void>(builder: (_) => const CaseStatusUpdatePage()),
         );
         return;
-
       case 'Billing':
-        Navigator.of(context).push(
-          MaterialPageRoute<void>(
-            builder: (_) => const BillingPage(),
-          ),
-        );
+        Navigator.of(
+          context,
+        ).push(MaterialPageRoute<void>(builder: (_) => const BillingPage()));
         return;
-
       case 'Case Details':
         Navigator.of(context).push(
-          MaterialPageRoute<void>(
-            builder: (_) => const CaseDetailsPage(),
-          ),
+          MaterialPageRoute<void>(builder: (_) => const CaseDetailsPage()),
         );
         return;
 
@@ -239,382 +355,8 @@ class _HomePageState extends State<HomePage> {
 
   void _showInfoSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        content: Text(message),
-      ),
+      SnackBar(behavior: SnackBarBehavior.floating, content: Text(message)),
     );
-  }
-
-  Future<void> _showChangePasswordDialog() async {
-    _currentPasswordController.clear();
-    _newPasswordController.clear();
-    _confirmPasswordController.clear();
-
-    var obscureCurrent = true;
-    var obscureNew = true;
-    var obscureConfirm = true;
-
-    await showDialog<void>(
-      context: context,
-      barrierDismissible: true,
-      builder: (dialogContext) {
-        return StatefulBuilder(
-          builder: (context, setLocalState) {
-            return Dialog(
-              insetPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 24),
-              backgroundColor: AppColor.transparent,
-              child: Container(
-                constraints: const BoxConstraints(maxWidth: 520),
-                padding: const EdgeInsets.all(22),
-                decoration: BoxDecoration(
-                  color: AppColor.panelBg,
-                  borderRadius: BorderRadius.circular(28),
-                  border: Border.all(color: AppColor.panelBorder),
-                  boxShadow: AppColor.overlayShadowList,
-                ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            width: 48,
-                            height: 48,
-                            decoration: BoxDecoration(
-                              color: AppColor.sectionBgBlue,
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: const Icon(
-                              Icons.lock_reset_rounded,
-                              color: AppColor.primary,
-                            ),
-                          ),
-                          const SizedBox(width: 14),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Change Password',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.w800,
-                                        color: AppColor.textDeepBlue,
-                                      ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  'Update your LMS login password with a stronger credential.',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(
-                                        color: AppColor.textSecondary,
-                                        height: 1.45,
-                                      ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () => Navigator.of(dialogContext).pop(),
-                            icon: const Icon(Icons.close_rounded),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 22),
-                      _PasswordField(
-                        controller: _currentPasswordController,
-                        label: 'Current Password',
-                        hintText: 'Enter current password',
-                        obscureText: obscureCurrent,
-                        onToggleVisibility: () {
-                          setLocalState(() {
-                            obscureCurrent = !obscureCurrent;
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 14),
-                      _PasswordField(
-                        controller: _newPasswordController,
-                        label: 'New Password',
-                        hintText: 'Enter new password',
-                        obscureText: obscureNew,
-                        onToggleVisibility: () {
-                          setLocalState(() {
-                            obscureNew = !obscureNew;
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 14),
-                      _PasswordField(
-                        controller: _confirmPasswordController,
-                        label: 'Confirm Password',
-                        hintText: 'Re-enter new password',
-                        obscureText: obscureConfirm,
-                        onToggleVisibility: () {
-                          setLocalState(() {
-                            obscureConfirm = !obscureConfirm;
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 22),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: OutlinedButton(
-                              onPressed: () => Navigator.of(dialogContext).pop(),
-                              style: OutlinedButton.styleFrom(
-                                foregroundColor: AppColor.dynamicAppBarIcon,
-                                padding: const EdgeInsets.symmetric(vertical: 14),
-                                side: const BorderSide(color: AppColor.outlineBorder),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                              ),
-                              child: const Text('Cancel'),
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: FilledButton.icon(
-                              onPressed: () {
-                                final current = _currentPasswordController.text.trim();
-                                final next = _newPasswordController.text.trim();
-                                final confirm = _confirmPasswordController.text.trim();
-
-                                if (current.isEmpty || next.isEmpty || confirm.isEmpty) {
-                                  _showInfoSnackBar('Please fill in all password fields.');
-                                  return;
-                                }
-                                if (next.length < 6) {
-                                  _showInfoSnackBar(
-                                    'New password should be at least 6 characters.',
-                                  );
-                                  return;
-                                }
-                                if (next != confirm) {
-                                  _showInfoSnackBar('New password and confirm password do not match.');
-                                  return;
-                                }
-
-                                Navigator.of(dialogContext).pop();
-                                _showInfoSnackBar('Password changed successfully.');
-                              },
-                              icon: const Icon(Icons.check_rounded, size: 18),
-                              label: const Text('Update'),
-                              style: FilledButton.styleFrom(
-                                backgroundColor: AppColor.primary,
-                                foregroundColor: AppColor.white,
-                                padding: const EdgeInsets.symmetric(vertical: 14),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-
-  Future<void> _showSessionInfoSheet() async {
-    await showModalBottomSheet<void>(
-      context: context,
-      backgroundColor: AppColor.transparent,
-      isScrollControlled: true,
-      builder: (context) {
-        return _SettingsBottomSheet(
-          title: 'Session Info',
-          subtitle: 'Operational session details for the current LMS access.',
-          icon: Icons.verified_user_outlined,
-          child: const Column(
-            children: [
-              _InfoLine(label: 'User Role', value: 'Legal Operations'),
-              _InfoLine(label: 'Access Zone', value: 'BARC Bank LMS'),
-              _InfoLine(label: 'Login Time', value: '28-Apr-26 09:30 AM'),
-              _InfoLine(label: 'Last Activity', value: '28-Apr-26 11:42 AM'),
-              _InfoLine(label: 'Session Status', value: 'Active'),
-              _InfoLine(label: 'Device', value: 'Android App'),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Future<void> _showHelpAndSupportSheet() async {
-    await showModalBottomSheet<void>(
-      context: context,
-      backgroundColor: AppColor.transparent,
-      isScrollControlled: true,
-      builder: (context) {
-        return _SettingsBottomSheet(
-          title: 'Help & Support',
-          subtitle: 'Useful contacts for operational issues, password support, and legal workflow assistance.',
-          icon: Icons.support_agent_rounded,
-          child: const Column(
-            children: [
-              _InfoLine(label: 'IT Help Desk', value: '+880 2 5501 2345'),
-              _InfoLine(label: 'LMS Support Mail', value: 'lms.support@barcbank.local'),
-              _InfoLine(label: 'Escalation Desk', value: 'Head Office Operations'),
-              _InfoLine(label: 'Support Window', value: 'Sun - Thu, 9:00 AM - 6:00 PM'),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Future<void> _showAboutLmsDialog() async {
-    await showDialog<void>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: AppColor.panelBg,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-          titlePadding: const EdgeInsets.fromLTRB(22, 22, 22, 10),
-          contentPadding: const EdgeInsets.fromLTRB(22, 0, 22, 18),
-          actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-          title: Row(
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: AppColor.drawerInfoBg,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Icon(
-                  Icons.info_outline_rounded,
-                  color: AppColor.primary,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  'About LMS',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w800,
-                        color: AppColor.textDeepBlue,
-                      ),
-                ),
-              ),
-            ],
-          ),
-          content: Text(
-            'BARC Bank LMS supports legal operations, case workflow tracking, compliance follow-up, and operational visibility for branch and head office teams.\n\nVersion: 1.0.0+1',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppColor.textSecondary,
-                  height: 1.55,
-                ),
-          ),
-          actions: [
-            FilledButton(
-              onPressed: () => Navigator.of(context).pop(),
-              style: FilledButton.styleFrom(
-                backgroundColor: AppColor.primary,
-                foregroundColor: AppColor.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
-                ),
-              ),
-              child: const Text('Close'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> _showLogoutDialog() async {
-    final shouldLogout = await showDialog<bool>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: AppColor.panelBg,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-          titlePadding: const EdgeInsets.fromLTRB(22, 22, 22, 10),
-          contentPadding: const EdgeInsets.fromLTRB(22, 0, 22, 18),
-          actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-          title: Row(
-            children: [
-              Container(
-                width: 42,
-                height: 42,
-                decoration: BoxDecoration(
-                  color: AppColor.errorSoftBg,
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: const Icon(
-                  Icons.logout_rounded,
-                  color: AppColor.error,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  'Logout',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w800,
-                        color: AppColor.textDeepBlue,
-                      ),
-                ),
-              ),
-            ],
-          ),
-          content: Text(
-            'Do you want to sign out from the BARC Bank LMS session on this device?',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppColor.textSecondary,
-                  height: 1.5,
-                ),
-          ),
-          actions: [
-            OutlinedButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: AppColor.dynamicAppBarIcon,
-                side: const BorderSide(color: AppColor.outlineBorder),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
-                ),
-              ),
-              child: const Text('Cancel'),
-            ),
-            FilledButton.icon(
-              onPressed: () => Navigator.of(context).pop(true),
-              style: FilledButton.styleFrom(
-                backgroundColor: AppColor.error,
-                foregroundColor: AppColor.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
-                ),
-              ),
-              icon: const Icon(Icons.logout_rounded, size: 18),
-              label: const Text('Logout'),
-            ),
-          ],
-        );
-      },
-    );
-
-    if (shouldLogout == true && mounted) {
-      Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
-    }
   }
 
   Future<void> _showActiveSearchDialog() async {
@@ -628,7 +370,8 @@ class _HomePageState extends State<HomePage> {
           case 1:
             return const _ModuleSearchDialog(
               title: 'Legal Cost Search',
-              subtitle: 'Find cost data by year, bill month, region, status, and portfolio.',
+              subtitle:
+                  'Find cost data by year, bill month, region, status, and portfolio.',
               fields: [
                 _DialogFieldConfig(
                   label: 'Year',
@@ -660,7 +403,8 @@ class _HomePageState extends State<HomePage> {
           default:
             return const _ModuleSearchDialog(
               title: 'Customer 360 Search',
-              subtitle: 'Search customer view by customer type, district, region, segment, and portfolio.',
+              subtitle:
+                  'Search customer view by customer type, district, region, segment, and portfolio.',
               fields: [
                 _DialogFieldConfig(
                   label: 'Customer Type',
@@ -669,7 +413,13 @@ class _HomePageState extends State<HomePage> {
                 ),
                 _DialogFieldConfig(
                   label: 'District',
-                  values: ['All District', 'Dhaka', 'Chattogram', 'Khulna', 'Rajshahi'],
+                  values: [
+                    'All District',
+                    'Dhaka',
+                    'Chattogram',
+                    'Khulna',
+                    'Rajshahi',
+                  ],
                   initialValue: 'All District',
                 ),
                 _DialogFieldConfig(
@@ -776,10 +526,7 @@ class _HomePageState extends State<HomePage> {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(
-              color: AppColor.primary,
-              width: 1.1,
-            ),
+            borderSide: const BorderSide(color: AppColor.primary, width: 1.1),
           ),
         ),
       ),
@@ -836,10 +583,7 @@ class _HomePageState extends State<HomePage> {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(
-              color: AppColor.primary,
-              width: 1.1,
-            ),
+            borderSide: const BorderSide(color: AppColor.primary, width: 1.1),
           ),
         ),
       ),
@@ -874,12 +618,12 @@ class _HomePageState extends State<HomePage> {
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 220),
                   curve: Curves.easeOutCubic,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 6, vertical: 7),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 7,
+                  ),
                   decoration: BoxDecoration(
-                    color: isSelected
-                        ? AppColor.primary
-                        : AppColor.transparent,
+                    color: isSelected ? AppColor.primary : AppColor.transparent,
                     borderRadius: BorderRadius.circular(14),
                     boxShadow: isSelected
                         ? const [
@@ -894,17 +638,14 @@ class _HomePageState extends State<HomePage> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(
-                        tab.icon,
-                        color: AppColor.white,
-                        size: 18,
-                      ),
+                      Icon(tab.icon, color: AppColor.white, size: 18),
                       const SizedBox(height: 3),
                       Text(
                         tab.title,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        style: Theme.of(context).textTheme.labelMedium
+                            ?.copyWith(
                               color: AppColor.white,
                               fontSize: 10.5,
                               fontWeight: isSelected
@@ -934,8 +675,8 @@ class _HomePageState extends State<HomePage> {
         titleContent: _currentIndex == 1 && _isLegalCostSearchMode
             ? _buildLegalCostSearchTitle()
             : _currentIndex == 2 && _isCustomer360SearchMode
-                ? _buildCustomer360SearchTitle()
-                : null,
+            ? _buildCustomer360SearchTitle()
+            : null,
         actions: [
           _AppBarActionButton(
             onPressed: _handleSearchTap,
@@ -986,10 +727,7 @@ class _HomeTabItem {
 }
 
 class _AppBarActionButton extends StatelessWidget {
-  const _AppBarActionButton({
-    required this.onPressed,
-    required this.icon,
-  });
+  const _AppBarActionButton({required this.onPressed, required this.icon});
 
   final VoidCallback onPressed;
   final IconData icon;
@@ -1095,7 +833,8 @@ class _ModuleSearchDialogState extends State<_ModuleSearchDialog> {
                       children: [
                         Text(
                           widget.title,
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          style: Theme.of(context).textTheme.titleLarge
+                              ?.copyWith(
                                 fontWeight: FontWeight.w800,
                                 color: AppColor.textDeepBlue,
                               ),
@@ -1103,7 +842,8 @@ class _ModuleSearchDialogState extends State<_ModuleSearchDialog> {
                         const SizedBox(height: 4),
                         Text(
                           widget.subtitle,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
                                 color: AppColor.textSecondary,
                                 height: 1.45,
                               ),
@@ -1210,19 +950,17 @@ class _SearchDropdownField extends StatelessWidget {
           Text(
             label,
             style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: AppColor.textSteel,
-                  fontWeight: FontWeight.w700,
-                ),
+              color: AppColor.textSteel,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           const SizedBox(height: 8),
           DropdownButtonFormField<String>(
             value: value,
             items: items
                 .map(
-                  (item) => DropdownMenuItem<String>(
-                    value: item,
-                    child: Text(item),
-                  ),
+                  (item) =>
+                      DropdownMenuItem<String>(value: item, child: Text(item)),
                 )
                 .toList(),
             onChanged: onChanged,
@@ -1280,9 +1018,9 @@ class _PasswordField extends StatelessWidget {
         Text(
           label,
           style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                color: AppColor.textSteel,
-                fontWeight: FontWeight.w700,
-              ),
+            color: AppColor.textSteel,
+            fontWeight: FontWeight.w700,
+          ),
         ),
         const SizedBox(height: 8),
         TextField(
@@ -1299,7 +1037,9 @@ class _PasswordField extends StatelessWidget {
             suffixIcon: IconButton(
               onPressed: onToggleVisibility,
               icon: Icon(
-                obscureText ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                obscureText
+                    ? Icons.visibility_off_outlined
+                    : Icons.visibility_outlined,
                 size: 20,
               ),
             ),
@@ -1313,10 +1053,7 @@ class _PasswordField extends StatelessWidget {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(
-                color: AppColor.primary,
-                width: 1.3,
-              ),
+              borderSide: const BorderSide(color: AppColor.primary, width: 1.3),
             ),
           ),
         ),
@@ -1373,17 +1110,17 @@ class _SettingsBottomSheet extends StatelessWidget {
                       Text(
                         title,
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.w800,
-                              color: AppColor.textDeepBlue,
-                            ),
+                          fontWeight: FontWeight.w800,
+                          color: AppColor.textDeepBlue,
+                        ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         subtitle,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: AppColor.textSecondary,
-                              height: 1.5,
-                            ),
+                          color: AppColor.textSecondary,
+                          height: 1.5,
+                        ),
                       ),
                     ],
                   ),
@@ -1420,10 +1157,7 @@ class _SettingsBottomSheet extends StatelessWidget {
 }
 
 class _InfoLine extends StatelessWidget {
-  const _InfoLine({
-    required this.label,
-    required this.value,
-  });
+  const _InfoLine({required this.label, required this.value});
 
   final String label;
   final String value;
@@ -1447,9 +1181,9 @@ class _InfoLine extends StatelessWidget {
               child: Text(
                 label,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppColor.textSecondary,
-                      fontWeight: FontWeight.w600,
-                    ),
+                  color: AppColor.textSecondary,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
             const SizedBox(width: 12),
@@ -1457,9 +1191,9 @@ class _InfoLine extends StatelessWidget {
               child: Text(
                 value,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppColor.textPrimary,
-                      fontWeight: FontWeight.w700,
-                    ),
+                  color: AppColor.textPrimary,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
           ],

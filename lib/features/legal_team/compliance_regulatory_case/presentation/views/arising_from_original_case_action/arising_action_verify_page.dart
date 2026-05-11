@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ArisingActionApproveReassignPage extends StatelessWidget {
-  const ArisingActionApproveReassignPage({super.key, this.caseData});
+class ArisingActionVerifyPage extends StatelessWidget {
+  const ArisingActionVerifyPage({super.key, this.caseData});
 
   final Map<String, dynamic>? caseData;
 
@@ -25,7 +25,7 @@ class ArisingActionApproveReassignPage extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: const Text(
-          'Approve Reassign',
+          'Verify',
           style: TextStyle(fontWeight: FontWeight.w700, fontSize: 17),
         ),
       ),

@@ -1,11 +1,7 @@
-
 import 'package:flutter/material.dart';
 
-class ArisingActionVerifyPage extends StatelessWidget {
-  const ArisingActionVerifyPage({
-    super.key,
-    this.caseData,
-  });
+class ArisingActionPUTUPPage extends StatelessWidget {
+  const ArisingActionPUTUPPage({super.key, this.caseData});
 
   final Map<String, dynamic>? caseData;
 
@@ -29,7 +25,7 @@ class ArisingActionVerifyPage extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: const Text(
-          'Verify',
+          'PUT-UP',
           style: TextStyle(fontWeight: FontWeight.w700, fontSize: 17),
         ),
       ),

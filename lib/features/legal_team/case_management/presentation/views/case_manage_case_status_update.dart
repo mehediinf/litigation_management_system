@@ -1,40 +1,78 @@
-//lib/features/head_office/supreme_court_matter/presentation/views/arising_from_original_case.dart
-
 import 'package:flutter/material.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 
+import 'all_bulk_action/bulk_approve.dart';
+import 'arising_from_original_case_action/arising_action_approve_putup_page.dart';
 import 'arising_from_original_case_action/arising_action_approve_reassign_page.dart';
 import 'arising_from_original_case_action/arising_action_delete_page.dart';
 import 'arising_from_original_case_action/arising_action_edit_page.dart';
+import 'arising_from_original_case_action/arising_action_file_confirm_page.dart';
 import 'arising_from_original_case_action/arising_action_preview_page.dart';
-import 'arising_from_original_case_action/arising_action_send_to_checker_page.dart';
-import 'arising_from_original_case_action/arising_action_verify_page.dart';
+import 'arising_from_original_case_action/arising_action_putup_page.dart';
+import 'arising_from_original_case_action/arising_action_reassign_file_page.dart';
+import 'arising_from_original_case_action/arising_action_update_next_date_page.dart';
+import 'all_bulk_action/bulk_confirm_page.dart';
+import 'all_bulk_action/bulk_rf_page.dart';
+import 'all_bulk_action/bulk_ar_page.dart';
+import 'case_status_update/delete_request_page.dart';
+import 'case_status_update/edit_request_page.dart';
+import 'case_status_update/next_date_update_page.dart';
+import 'case_status_update/preview_page.dart';
+import 'case_status_update/send_to_checker_page.dart';
+import 'case_status_update/verify_page.dart';
 
-class ArisingFromOriginalCasePage extends StatefulWidget {
-  const ArisingFromOriginalCasePage({super.key});
+class CaseManagementCaseStatusUpdatePage extends StatefulWidget {
+  const CaseManagementCaseStatusUpdatePage({super.key});
 
   @override
-  State<ArisingFromOriginalCasePage> createState() =>
-      _ArisingFromOriginalCasePageState();
+  State<CaseManagementCaseStatusUpdatePage> createState() =>
+      _CaseManagementCaseStatusUpdatePageState();
 }
 
-class _ArisingFromOriginalCasePageState
-    extends State<ArisingFromOriginalCasePage>
-    with SingleTickerProviderStateMixin {
+class _CaseManagementCaseStatusUpdatePageState
+    extends State<CaseManagementCaseStatusUpdatePage>
+    with TickerProviderStateMixin {
   late final TabController _tabController;
+  late final AnimationController _fabAnimController;
   bool _isSearching = false;
   final TextEditingController _searchController = TextEditingController();
+
+  // Search filter controllers
+  String _selectedCaseType = 'Select Case Type';
+  String _selectedProposedType = 'Loan';
+  final TextEditingController _loanAcSearchController = TextEditingController();
+  final TextEditingController _caseNoSearchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _fabAnimController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 50),
+    );
+    _tabController.addListener(_onTabChanged);
+  }
+
+  void _onTabChanged() {
+    if (_tabController.index == 1) {
+      _fabAnimController.forward();
+    } else {
+      _fabAnimController.reverse();
+      _isSearching = false;
+      _searchController.clear();
+    }
+    setState(() {});
   }
 
   @override
   void dispose() {
+    _tabController.removeListener(_onTabChanged);
     _tabController.dispose();
     _searchController.dispose();
+    _loanAcSearchController.dispose();
+    _caseNoSearchController.dispose();
+    _fabAnimController.dispose();
     super.dispose();
   }
 
@@ -99,7 +137,7 @@ class _ArisingFromOriginalCasePageState
                 ),
               )
             : const Text(
-                'Arising From Original Case',
+                'Case Status Update',
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 17,
@@ -107,22 +145,27 @@ class _ArisingFromOriginalCasePageState
                 ),
               ),
         actions: [
-          _isSearching
-              ? IconButton(
-                  icon: const Icon(Icons.close_rounded, size: 20),
-                  onPressed: () {
-                    setState(() {
-                      _searchController.clear();
-                      _isSearching = false;
-                    });
-                  },
-                )
-              : IconButton(
-                  icon: const Icon(Icons.search_rounded, size: 22),
-                  onPressed: () {
-                    setState(() => _isSearching = true);
-                  },
-                ),
+          if (_tabController.index == 1)
+            _isSearching
+                ? IconButton(
+                    icon: const Icon(Icons.close_rounded, size: 20),
+                    onPressed: () {
+                      setState(() {
+                        _isSearching = false;
+                        _searchController.clear();
+                      });
+                    },
+                  )
+                : FadeTransition(
+                    opacity: _fabAnimController,
+                    child: ScaleTransition(
+                      scale: _fabAnimController,
+                      child: IconButton(
+                        icon: const Icon(Icons.search_rounded, size: 22),
+                        onPressed: () => _showAdvancedSearchDialog(),
+                      ),
+                    ),
+                  ),
           const SizedBox(width: 4),
         ],
         bottom: PreferredSize(
@@ -159,6 +202,110 @@ class _ArisingFromOriginalCasePageState
           _DataGridTab(searchQuery: _searchController.text),
         ],
       ),
+      floatingActionButton: _tabController.index == 0
+          ? null
+          : ScaleTransition(
+              scale: Tween<double>(begin: 0.0, end: 1.0).animate(
+                CurvedAnimation(
+                  parent: _fabAnimController,
+                  curve: Curves.fastOutSlowIn,
+                ),
+              ),
+              child: FadeTransition(
+                opacity: Tween<double>(begin: 0.0, end: 1.0).animate(
+                  CurvedAnimation(
+                    parent: _fabAnimController,
+                    curve: Curves.fastOutSlowIn,
+                  ),
+                ),
+                child: FloatingActionButton(
+                  backgroundColor: const Color(0xFF1552B0),
+                  foregroundColor: Colors.white,
+                  shape: const CircleBorder(),
+                  onPressed: () {
+                    _showBulkActionMenu(context);
+                  },
+                  child: const Icon(Icons.more_vert_rounded),
+                ),
+              ),
+            ),
+    );
+  }
+
+  void _showAdvancedSearchDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => _AdvancedSearchDialog(
+        caseTypeOptions: _caseTypeOptions,
+        proposedTypeOptions: _proposedTypeOptions,
+        initialCaseType: _selectedCaseType,
+        initialProposedType: _selectedProposedType,
+        onSearch: (caseType, proposedType, loanAc, caseNo) {
+          setState(() {
+            _selectedCaseType = caseType;
+            _selectedProposedType = proposedType;
+            _loanAcSearchController.text = loanAc;
+            _caseNoSearchController.text = caseNo;
+          });
+          Navigator.pop(context);
+        },
+      ),
+    );
+  }
+
+  void _showBulkActionMenu(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'Bulk Actions',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(height: 20),
+              _BulkActionButton(
+                label: 'Bulk Approve',
+                icon: Icons.check_circle_rounded,
+                color: const Color(0xFF06D6A0),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.of(context).push<void>(
+                    MaterialPageRoute<void>(
+                      builder: (_) => const BulkApprovePage(),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 40),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -173,18 +320,45 @@ class _FormTab extends StatefulWidget {
 }
 
 class _FormTabState extends State<_FormTab> {
-  String _division = _divisionOptions.first;
-  String _caseCategory = _caseCategoryOptions.first;
-  String _caseTypes = _caseTypeOptions.first;
+  String _reqType = _caseTypeOptions.first;
   String _proposedType = _proposedTypeOptions.first;
 
   final _loanAcController = TextEditingController();
   final _caseNumberController = TextEditingController();
+  final _caseDateController = TextEditingController();
+
+  Future<void> _pickDate() async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: Color(0xFF1552B0),
+              onPrimary: Colors.white,
+              onSurface: Colors.black87,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null) {
+      setState(() {
+        _caseDateController.text =
+            "${picked.day.toString().padLeft(2, '0')}/${picked.month.toString().padLeft(2, '0')}/${picked.year}";
+      });
+    }
+  }
 
   @override
   void dispose() {
     _loanAcController.dispose();
     _caseNumberController.dispose();
+    _caseDateController.dispose();
     super.dispose();
   }
 
@@ -200,22 +374,10 @@ class _FormTabState extends State<_FormTab> {
             child: Column(
               children: [
                 _FormDropdown(
-                  label: 'Division',
-                  value: _division,
-                  options: _divisionOptions,
-                  onChanged: (v) => setState(() => _division = v),
-                ),
-                _FormDropdown(
-                  label: 'Case Category',
-                  value: _caseCategory,
-                  options: _caseCategoryOptions,
-                  onChanged: (v) => setState(() => _caseCategory = v),
-                ),
-                _FormDropdown(
-                  label: 'Case Types',
-                  value: _caseTypes,
+                  label: 'Req Type',
+                  value: _reqType,
                   options: _caseTypeOptions,
-                  onChanged: (v) => setState(() => _caseTypes = v),
+                  onChanged: (v) => setState(() => _reqType = v),
                 ),
                 _FormDropdown(
                   label: 'Proposed Type',
@@ -224,13 +386,20 @@ class _FormTabState extends State<_FormTab> {
                   onChanged: (v) => setState(() => _proposedType = v),
                 ),
                 _FormTextField(
-                  label: 'Loan A/C or Card',
+                  label: 'Loan A/C No.',
                   controller: _loanAcController,
                 ),
                 _FormTextField(
-                  label: 'Case Number',
+                  label: 'Case No.',
                   controller: _caseNumberController,
+                ),
+                _FormTextField(
+                  label: 'Case Date',
+                  controller: _caseDateController,
+                  hint: 'dd/mm/yyyy',
                   isLast: true,
+                  readOnly: true,
+                  onTap: _pickDate,
                 ),
               ],
             ),
@@ -241,14 +410,17 @@ class _FormTabState extends State<_FormTab> {
               Expanded(
                 child: OutlinedButton.icon(
                   onPressed: () {},
-                  icon: const Icon(Icons.search_rounded, size: 18),
-                  label: const Text('Search'),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: const Color(0xFF1552B0),
-                    side: const BorderSide(
-                      color: Color(0xFF1552B0),
-                      width: 1.5,
-                    ),
+                  icon: const Icon(
+                    Icons.search_rounded,
+                    color: Color(0xFFFFFFFF),
+                    size: 18,
+                  ),
+                  label: const Text(
+                    'Search',
+                    style: TextStyle(color: Color(0xFFFFFFFF)),
+                  ),
+                  style: FilledButton.styleFrom(
+                    backgroundColor: const Color(0xFF7C3AED),
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
@@ -395,11 +567,17 @@ class _FormTextField extends StatelessWidget {
     required this.label,
     required this.controller,
     this.isLast = false,
+    this.hint,
+    this.readOnly = false,
+    this.onTap,
   });
 
   final String label;
   final TextEditingController controller;
   final bool isLast;
+  final String? hint;
+  final bool readOnly;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -420,11 +598,22 @@ class _FormTextField extends StatelessWidget {
           const SizedBox(height: 6),
           TextField(
             controller: controller,
+            readOnly: readOnly,
+            onTap: onTap,
             style: const TextStyle(fontSize: 13.5),
             decoration: InputDecoration(
               isDense: true,
               filled: true,
               fillColor: const Color(0xFFF7F9FD),
+              hintText: hint,
+              hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 13),
+              suffixIcon: readOnly
+                  ? const Icon(
+                      Icons.calendar_month_rounded,
+                      size: 18,
+                      color: Color(0xFF1552B0),
+                    )
+                  : null,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(color: Colors.grey.shade200),
@@ -515,10 +704,8 @@ class _CaseGridCard extends StatefulWidget {
 
 class _CaseGridCardState extends State<_CaseGridCard>
     with SingleTickerProviderStateMixin {
-  bool _expanded = false;
   bool _showActions = false;
   late final AnimationController _ctrl;
-  late final Animation<double> _anim;
   late final ScrollController _actionScroll;
 
   static const List<Color> _kActionAccents = [
@@ -535,26 +722,20 @@ class _CaseGridCardState extends State<_CaseGridCard>
   ];
 
   static const Map<String, Map<String, Object>> _kActionMeta = {
-    'D': {'icon': Icons.delete, 'desc': 'Delete'},
-    'ESF': {'icon': Icons.edit, 'desc': 'Edit File'},
-    'SFC': {'icon': Icons.file_copy, 'desc': 'File Confirm'},
-    'RF': {'icon': Icons.assignment, 'desc': 'Re-Assign File'},
-    'AR': {'icon': Icons.assignment_turned_in, 'desc': 'Approve Reassign'},
+    'D': {'icon': Icons.delete, 'desc': 'Delete Request'},
+    'E': {'icon': Icons.border_color, 'desc': 'Edit Request'},
+    'STC': {'icon': Icons.send, 'desc': 'Send To Checker'},
+    'V': {'icon': Icons.verified, 'desc': 'Verify'},
+    'U': {'icon': Icons.edit_note_outlined, 'desc': 'Update Next Date'},
     'P': {'icon': Icons.preview, 'desc': 'Preview'},
-    'PU': {'icon': Icons.menu_book, 'desc': 'PUT-UP'},
-    'AP': {'icon': Icons.approval, 'desc': 'Approve PUT-UP'},
-    'U': {'icon': Icons.edit_calendar_outlined, 'desc': 'Update Next Date'},
   };
   static const List<String> _kDefaultActionKeys = [
     'D',
-    'ESF',
-    'SFC',
-    'RF',
-    'AR',
-    'P',
-    'PU',
-    'AP',
+    'E',
+    'STC',
+    'V',
     'U',
+    'P',
   ];
 
   static List<String> _actionKeysForCase(Map<String, dynamic> data) {
@@ -591,7 +772,6 @@ class _CaseGridCardState extends State<_CaseGridCard>
       vsync: this,
       duration: const Duration(milliseconds: 260),
     );
-    _anim = CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut);
   }
 
   @override
@@ -599,11 +779,6 @@ class _CaseGridCardState extends State<_CaseGridCard>
     _actionScroll.dispose();
     _ctrl.dispose();
     super.dispose();
-  }
-
-  void _toggle() {
-    setState(() => _expanded = !_expanded);
-    _expanded ? _ctrl.forward() : _ctrl.reverse();
   }
 
   String _v(String key) {
@@ -620,92 +795,47 @@ class _CaseGridCardState extends State<_CaseGridCard>
         cs.contains('decline');
   }
 
-  String _formatClaimAmount(String raw) {
-    final t = raw.trim();
-    if (t.isEmpty || t == '—') return '—';
-    final d = double.tryParse(t.replaceAll(',', ''));
-    if (d == null) return raw;
-    final parts = d.toStringAsFixed(2).split('.');
-    var intPart = parts[0];
-    final neg = intPart.startsWith('-');
-    if (neg) intPart = intPart.substring(1);
-    final buf = StringBuffer(neg ? '-' : '');
-    final len = intPart.length;
-    for (var i = 0; i < len; i++) {
-      if (i > 0 && (len - i) % 3 == 0) buf.write(',');
-      buf.write(intPart[i]);
-    }
-    return '${buf.toString()}.${parts[1]}';
-  }
-
   void _openActionByCode(BuildContext context, String code) {
     final d = widget.data;
     switch (code) {
       case 'D':
         Navigator.of(context).push<void>(
           MaterialPageRoute<void>(
-            builder: (_) => ArisingActionDeletePage(caseData: d),
-          ),
-        );
-        return;
-      case 'ESF':
-        Navigator.of(context).push<void>(
-          MaterialPageRoute<void>(
-            builder: (_) => ArisingActionSendToCheckerPage(caseData: d),
-          ),
-        );
-        return;
-      case 'SFC':
-        Navigator.of(context).push<void>(
-          MaterialPageRoute<void>(
-            builder: (_) => ArisingActionEditPage(caseData: d),
+            builder: (_) => DeleteRequestPage(caseData: d),
           ),
         );
         return;
 
-      case 'RF':
+      case 'E':
         Navigator.of(context).push<void>(
-          MaterialPageRoute<void>(
-            builder: (_) => ArisingActionVerifyPage(caseData: d),
-          ),
+          MaterialPageRoute<void>(builder: (_) => EditRequestPage(caseData: d)),
         );
         return;
-      case 'AR':
+
+      case 'STC':
         Navigator.of(context).push<void>(
           MaterialPageRoute<void>(
-            builder: (_) => ArisingActionApproveReassignPage(caseData: d),
-          ),
-        );
-        return;
-      case 'P':
-        Navigator.of(context).push<void>(
-          MaterialPageRoute<void>(
-            builder: (_) => ArisingActionPreviewPage(caseData: d),
+            builder: (_) => SendToCheckerPage(caseData: d),
           ),
         );
         return;
 
-      case 'PU':
+      case 'V':
         Navigator.of(context).push<void>(
-          MaterialPageRoute<void>(
-            builder: (_) => ArisingActionPreviewPage(caseData: d),
-          ),
-        );
-        return;
-
-      case 'AP':
-        Navigator.of(context).push<void>(
-          MaterialPageRoute<void>(
-            builder: (_) => ArisingActionPreviewPage(caseData: d),
-          ),
+          MaterialPageRoute<void>(builder: (_) => VerifyPage(caseData: d)),
         );
         return;
 
       case 'U':
         Navigator.of(context).push<void>(
           MaterialPageRoute<void>(
-            builder: (_) => ArisingActionPreviewPage(caseData: d),
+            builder: (_) => NextDateUpdatePage(caseData: d),
           ),
+        );
+        return;
+      case 'P':
+        Navigator.of(context).push<void>(
+          MaterialPageRoute<void>(builder: (_) => PreviewPage(caseData: d)),
         );
         return;
 
@@ -828,135 +958,38 @@ class _CaseGridCardState extends State<_CaseGridCard>
                         child: Column(
                           children: [
                             _CaseDataFieldRow(
-                              label: 'Rule Number',
-                              value: _v('Rule Number'),
+                              label: 'Loan A/C or Card No.',
+                              value: _v('Loan A/C or Card No.'),
                             ),
+
                             _CaseDataFieldRow(
-                              label: 'Division Name',
-                              value: _v('Division Name'),
+                              label: 'A/C Name or Name on Card',
+                              value: _v('A/C Name or Name on Card'),
                             ),
+
                             _CaseDataFieldRow(
-                              label: 'Case Category',
-                              value: _v('Case Category'),
+                              label: 'Case Number',
+                              value: _v('Case Number'),
                             ),
+
                             _CaseDataFieldRow(
-                              label: 'Case Claim',
-                              value: _formatClaimAmount(_v('Case Claim')),
+                              label: 'Entry By',
+                              value: _v('Entry By'),
                             ),
+
                             _CaseDataFieldRow(
-                              label: 'Account Name',
-                              value: _v('Account Name'),
+                              label: 'Entry Date Time',
+                              value: _v('Entry Date Time'),
                             ),
+
                             _CaseDataFieldRow(
-                              label: 'Filing Date',
-                              value: _v('Filing Date'),
+                              label: 'Update By',
+                              value: _v('Update By'),
                             ),
+
                             _CaseDataFieldRow(
-                              label: 'District Name',
-                              value: _v('District Name'),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: GestureDetector(
-                            onTap: _toggle,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 14,
-                                vertical: 8,
-                              ),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFE8EEF9),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    _expanded ? 'Collapse' : 'Details',
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700,
-                                      color: Color(0xFF1552B0),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Icon(
-                                    _expanded
-                                        ? Icons.keyboard_arrow_up_rounded
-                                        : Icons.keyboard_arrow_down_rounded,
-                                    size: 16,
-                                    color: const Color(0xFF1552B0),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizeTransition(
-                        sizeFactor: _anim,
-                        child: Column(
-                          children: [
-                            Divider(height: 1, color: Colors.grey.shade100),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(
-                                14,
-                                16,
-                                14,
-                                16,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  _DetailSection(
-                                    title: 'Case Information',
-                                    icon: Icons.info_outline_rounded,
-                                    items: [
-                                      ('Case Status', _v('Case Status')),
-                                      ('Case Category', _v('Case Category')),
-                                      ('Case Type', _v('Case Type')),
-                                      ('Rule Number', _v('Rule Number')),
-                                      ('Division', _v('Division Name')),
-                                      ('Proposed Type', _v('Proposed Type')),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 14),
-                                  _DetailSection(
-                                    title: 'Account Details',
-                                    icon: Icons.credit_card_rounded,
-                                    items: [
-                                      ('Account Name', _v('Account Name')),
-                                      ('Account No', _v('Account')),
-                                      ('Case Claim', '৳ ${_v('Case Claim')}'),
-                                      (
-                                        'Closing Status',
-                                        _v('Account Closing Status'),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 14),
-                                  _DetailSection(
-                                    title: 'Activity & Location',
-                                    icon: Icons.history_rounded,
-                                    items: [
-                                      ('Filing Date', _v('Filing Date')),
-                                      ('Cause of Action', _v('Cause Action')),
-                                      (
-                                        'Last Activities',
-                                        _v('Last Activities'),
-                                      ),
-                                      ('Remarks', _v('Remarks')),
-                                      ('District', _v('District Name')),
-                                      ('HC Bench', _v('HC Bench')),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                              label: 'Update Date and Time',
+                              value: _v('Update Date and Time'),
                             ),
                           ],
                         ),
@@ -966,6 +999,7 @@ class _CaseGridCardState extends State<_CaseGridCard>
                 ],
               ),
             ),
+
             if (_showActions)
               Positioned(
                 left: 0,
@@ -1052,12 +1086,6 @@ class _CaseStatusHeaderChip extends StatelessWidget {
               ),
             ),
           ),
-          // const SizedBox(width: 4),
-          // Icon(
-          //   Icons.open_in_new_rounded,
-          //   size: 12,
-          //   color: dotColor,
-          // ),
         ],
       ),
     );
@@ -1456,7 +1484,7 @@ class _CaseCompactActionTileState extends State<_CaseCompactActionTile>
           setState(() => _pressed = false);
         },
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
+          duration: const Duration(milliseconds: 100),
           padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 6),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
@@ -1486,7 +1514,7 @@ class _CaseCompactActionTileState extends State<_CaseCompactActionTile>
           child: Row(
             children: [
               AnimatedContainer(
-                duration: const Duration(milliseconds: 150),
+                duration: const Duration(milliseconds: 100),
                 width: 28,
                 height: 28,
                 decoration: BoxDecoration(
@@ -1528,7 +1556,7 @@ class _CaseCompactActionTileState extends State<_CaseCompactActionTile>
               ),
               AnimatedSlide(
                 offset: _pressed ? const Offset(0.25, 0) : Offset.zero,
-                duration: const Duration(milliseconds: 150),
+                duration: const Duration(milliseconds: 100),
                 child: Icon(
                   Icons.arrow_forward_ios_rounded,
                   size: 8,
@@ -1543,351 +1571,424 @@ class _CaseCompactActionTileState extends State<_CaseCompactActionTile>
   }
 }
 
-class _DetailSection extends StatelessWidget {
-  const _DetailSection({
-    required this.title,
-    required this.icon,
-    required this.items,
+// ADVANCED SEARCH DIALOG
+
+class _AdvancedSearchDialog extends StatefulWidget {
+  const _AdvancedSearchDialog({
+    required this.caseTypeOptions,
+    required this.proposedTypeOptions,
+    required this.initialCaseType,
+    required this.initialProposedType,
+    required this.onSearch,
   });
 
-  final String title;
-  final IconData icon;
-  final List<(String, String)> items;
+  final List<String> caseTypeOptions;
+  final List<String> proposedTypeOptions;
+  final String initialCaseType;
+  final String initialProposedType;
+  final Function(String, String, String, String) onSearch;
+
+  @override
+  State<_AdvancedSearchDialog> createState() => _AdvancedSearchDialogState();
+}
+
+class _AdvancedSearchDialogState extends State<_AdvancedSearchDialog> {
+  late String _selectedCaseType;
+  late String _selectedProposedType;
+  final TextEditingController _loanAcController = TextEditingController();
+  final TextEditingController _caseNoController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedCaseType = widget.initialCaseType;
+    _selectedProposedType = widget.initialProposedType;
+  }
+
+  @override
+  void dispose() {
+    _loanAcController.dispose();
+    _caseNoController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Advanced Search',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(Icons.close_rounded),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              _SearchField(
+                label: 'Case Type',
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey.shade300),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: const SizedBox.shrink(),
+                    value: _selectedCaseType,
+                    items: widget.caseTypeOptions.map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: Text(value),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedCaseType = newValue ?? 'Select Case Type';
+                      });
+                    },
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              _SearchField(
+                label: 'Proposed Type',
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey.shade300),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    underline: const SizedBox.shrink(),
+                    value: _selectedProposedType,
+                    items: widget.proposedTypeOptions.map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: Text(value),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedProposedType = newValue ?? 'Loan';
+                      });
+                    },
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              _SearchField(
+                label: 'Loan A/C No.',
+                child: TextField(
+                  controller: _loanAcController,
+                  decoration: InputDecoration(
+                    hintText: 'Enter Loan A/C No.',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: Colors.grey.shade300),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: Colors.grey.shade300),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(
+                        color: Color(0xFF1552B0),
+                        width: 1.5,
+                      ),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 12,
+                    ),
+                    isDense: true,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              _SearchField(
+                label: 'Case No.',
+                child: TextField(
+                  controller: _caseNoController,
+                  decoration: InputDecoration(
+                    hintText: 'Enter Case No.',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: Colors.grey.shade300),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: Colors.grey.shade300),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(
+                        color: Color(0xFF1552B0),
+                        width: 1.5,
+                      ),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 12,
+                    ),
+                    isDense: true,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () {
+                        _loanAcController.clear();
+                        _caseNoController.clear();
+                        setState(() {
+                          _selectedCaseType = 'Select Case Type';
+                          _selectedProposedType = 'Loan';
+                        });
+                      },
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        side: const BorderSide(
+                          color: Color(0xFF1552B0),
+                          width: 1.5,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: const Text(
+                        'Clear',
+                        style: TextStyle(
+                          color: Color(0xFF1552B0),
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: FilledButton(
+                      onPressed: () {
+                        widget.onSearch(
+                          _selectedCaseType,
+                          _selectedProposedType,
+                          _loanAcController.text,
+                          _caseNoController.text,
+                        );
+                      },
+                      style: FilledButton.styleFrom(
+                        backgroundColor: const Color(0xFF1552B0),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: const Text(
+                        'Search',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SearchField extends StatelessWidget {
+  const _SearchField({required this.label, required this.child});
+
+  final String label;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: const Color(0xFFE8EEF9),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Icon(icon, size: 13, color: const Color(0xFF1552B0)),
-            ),
-            const SizedBox(width: 8),
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 12.5,
-                fontWeight: FontWeight.w800,
-                color: Color(0xFF334155),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 10),
-        Container(
-          decoration: BoxDecoration(
-            color: const Color(0xFFF8FAFF),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: const Color(0xFFE2E8F0)),
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w700,
+            color: Color(0xFF64748B),
+            letterSpacing: 0.3,
           ),
-          child: Column(
-            children: List.generate(items.length, (i) {
-              final (label, value) = items[i];
-              final isLast = i == items.length - 1;
-              return Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 9,
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: 105,
-                          child: Text(
-                            label,
-                            style: TextStyle(
-                              fontSize: 11,
-                              color: Colors.grey.shade500,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          ':',
-                          style: TextStyle(
-                            fontSize: 11,
-                            color: Colors.grey.shade400,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            value,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w700,
-                              color: Color(0xFF1E293B),
-                            ),
-                          ),
-                        ),
-                      ],
+        ),
+        const SizedBox(height: 8),
+        child,
+      ],
+    );
+  }
+}
+
+// BULK ACTION BUTTON
+
+class _BulkActionButton extends StatelessWidget {
+  const _BulkActionButton({
+    required this.label,
+    required this.icon,
+    required this.color,
+    required this.onPressed,
+  });
+
+  final String label;
+  final IconData icon;
+  final Color color;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withValues(alpha: 0.2), width: 1),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onPressed,
+          borderRadius: BorderRadius.circular(12),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: color,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(icon, color: Colors.white, size: 20),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: color,
                     ),
                   ),
-                  if (!isLast)
-                    Divider(
-                      height: 1,
-                      indent: 12,
-                      endIndent: 12,
-                      color: Colors.grey.shade100,
-                    ),
-                ],
-              );
-            }),
+                ),
+                Icon(Icons.arrow_forward_ios_rounded, color: color, size: 16),
+              ],
+            ),
           ),
         ),
-      ],
+      ),
     );
   }
 }
 
 // CONSTANTS
 
-const List<String> _divisionOptions = [
-  'Select Division',
-  'High Court Division',
-  'Appellate Division',
-];
-
-const List<String> _caseCategoryOptions = [
-  'Select Case Category',
-  'Civil Appeal',
-  'Civil Cases',
-  'Criminal Case(AD)',
-  'Writ Petition',
-];
-
 const List<String> _caseTypeOptions = [
   'Select Case Type',
-  'First Appeal',
-  'First Misc Appeal',
-  'Civil Appeal',
-  'Criminal Appeal',
-  'Civil Revision',
+  'Auction only',
+  'Legal Notice',
+  'NI Act-138',
+  'ARA-2003',
+  'Others',
 ];
 
-const List<String> _proposedTypeOptions = [
-  'Proposed Type',
-  'Loan',
-  'New',
-  'Running',
-  'Closed',
-];
+const List<String> _proposedTypeOptions = ['Loan', 'Card'];
 
 // DUMMY DATA
 
 final List<Map<String, dynamic>> _dummyCases = [
   {
-    'Actions': ['D', 'ESF', 'SFC', 'RF', 'AR', 'P', 'PU', 'AP', 'U'],
-    'Status': 'Verified',
-    'Division Name': 'High Court Division',
-    'Case Category': 'Civil Appeal',
-    'Case Type': 'First Appeal',
-    'Case Status': 'Received Rule Copy From High Court',
-    'Rule Number': 'HC-333333/2025',
-    'Case Claim': '333.00',
-    'Proposed Type': 'Loan',
-    'Account Name': 'Bbl',
-    'Account': '1111111111111111',
-    'Cause Action': 'asdfsa',
-    'Filing Date': '16-10-2025',
-    'Last Activities': 'asdf',
-    'Remarks': 'asdf',
-    'Account Closing Status': 'Yes',
-    'District Name': 'Bagerhat',
-    'HC Bench': 'A',
+    'Actions': ['D', 'E', 'STC', 'V', 'U', 'P'],
+    'Status': 'Approved',
+    'Loan A/C or Card No.': '1111111111111111',
+    'A/C Name or Name on Card': 'M/s Sayman Hardware',
+    'Case Number': 'Artho-01/15',
+    'Entry By': 'Super Admin(7777777)',
+    'Entry Date Time': '01-Dec-22 09:15 AM',
+    'Update By': 'Super Admin(7777777)',
+    'Update Date and Time': '29-Nov-22 05:21 PM',
+  },
+
+  {
+    'Actions': ['E', 'STC', 'V', 'U', 'P'],
+    'Status': 'Approved',
+    'Loan A/C or Card No.': '1111111111111111',
+    'A/C Name or Name on Card': 'M/s Sayman Hardware',
+    'Case Number': 'Artho-01/15',
+    'Entry By': 'Super Admin(7777777)',
+    'Entry Date Time': '01-Dec-22 09:15 AM',
+    'Update By': 'Super Admin(7777777)',
+    'Update Date and Time': '29-Nov-22 05:21 PM',
   },
   {
-    'Actions': ['E', 'P'],
-    'Status': 'Verified',
-    'Division Name': 'High Court Division',
-    'Case Category': 'Civil Appeal',
-    'Case Type': 'First Appeal',
-    'Case Status': 'Received Rule Copy From High Court',
-    'Rule Number': 'HC-3333333333/2025',
-    'Case Claim': '333.00',
-    'Proposed Type': 'Loan',
-    'Account Name': 'asdf',
-    'Account': '1111111111111111',
-    'Cause Action': 'asdfasdf',
-    'Filing Date': '08-10-2025',
-    'Last Activities': 'sdf',
-    'Remarks': 'asdf',
-    'Account Closing Status': 'Yes',
-    'District Name': 'Bagerhat',
-    'HC Bench': 'A',
+    'Actions': ['D', 'E', 'STC', 'V', 'U', 'P'],
+    'Status': 'Approved',
+    'Loan A/C or Card No.': '1111111111111111',
+    'A/C Name or Name on Card': 'M/s Sayman Hardware',
+    'Case Number': 'Artho-01/15',
+    'Entry By': 'Super Admin(7777777)',
+    'Entry Date Time': '01-Dec-22 09:15 AM',
+    'Update By': 'Super Admin(7777777)',
+    'Update Date and Time': '29-Nov-22 05:21 PM',
   },
   {
-    'Actions': <String>[],
-    'Status': 'Verified',
-    'Division Name': 'Appellate Division',
-    'Case Category': 'Civil Cases',
-    'Case Type': 'Civil Appeal',
-    'Case Status': 'Power/Authorization Submission',
-    'Rule Number': 'HC-34242423/2025',
-    'Case Claim': '0.00',
-    'Proposed Type': '',
-    'Account Name': 'sadfasfd',
-    'Account': '8888888888888888',
-    'Cause Action': 'sadfa',
-    'Filing Date': '23-07-2025',
-    'Last Activities': 'sadfsa',
-    'Remarks': 'asdf',
-    'Account Closing Status': 'Yes',
-    'District Name': 'Bagerhat',
-    'HC Bench': 'A',
+    'Actions': ['D', 'E', 'STC', 'V'],
+    'Status': 'Approved',
+    'Loan A/C or Card No.': '1111111111111111',
+    'A/C Name or Name on Card': 'M/s Sayman Hardware',
+    'Case Number': 'Artho-01/15',
+    'Entry By': 'Super Admin(7777777)',
+    'Entry Date Time': '01-Dec-22 09:15 AM',
+    'Update By': 'Super Admin(7777777)',
+    'Update Date and Time': '29-Nov-22 05:21 PM',
   },
   {
-    'Actions': ['STC', 'V', 'RF'],
-    'Status': 'Verified',
-    'Division Name': 'Appellate Division',
-    'Case Category': 'Criminal Case(AD)',
-    'Case Type': 'Criminal Appeal',
-    'Case Status': 'Summon/Rule Copy Received By Bank',
-    'Rule Number': 'HC-3455/2025',
-    'Case Claim': '0.00',
-    'Proposed Type': '',
-    'Account Name': 'fsadfsad',
-    'Account': '8888888888888888',
-    'Cause Action': '555',
-    'Filing Date': '23-07-2025',
-    'Last Activities': '55',
-    'Remarks': '555',
-    'Account Closing Status': 'Yes',
-    'District Name': 'Bagerhat',
-    'HC Bench': 'A',
-  },
-  {
-    'Actions': [
-      {'code': 'D'},
-      {'code': 'AR'},
-      {'code': 'P'},
-    ],
-    'Status': 'Verified',
-    'Division Name': 'Appellate Division',
-    'Case Category': 'Criminal Case(AD)',
-    'Case Type': 'Criminal Appeal',
-    'Case Status': 'Summon/Rule Copy Received By Bank',
-    'Rule Number': 'HC-33/2025',
-    'Case Claim': '333.00',
-    'Proposed Type': '',
-    'Account Name': 'asdfasdf',
-    'Account': '3333333333333333',
-    'Cause Action': '33',
-    'Filing Date': '20-07-2025',
-    'Last Activities': '33',
-    'Remarks': '33',
-    'Account Closing Status': 'No',
-    'District Name': 'Bagerhat',
-    'HC Bench': 'A',
-  },
-  {
-    'Actions': ['V'],
-    'Status': 'Verified',
-    'Division Name': 'High Court Division',
-    'Case Category': 'Civil Appeal',
-    'Case Type': 'First Appeal',
-    'Case Status': 'Power/Authorization Submission',
-    'Rule Number': 'HC-11/2025',
-    'Case Claim': '1.00',
-    'Proposed Type': 'Loan',
-    'Account Name': '111',
-    'Account': '1111111111111111',
-    'Cause Action': '1',
-    'Filing Date': '07-07-2025',
-    'Last Activities': '1',
-    'Remarks': '1',
-    'Account Closing Status': 'Yes',
-    'District Name': 'Bagerhat',
-    'HC Bench': 'A',
-  },
-  {
-    'Actions': ['D', 'E', 'STC', 'AR', 'P'],
-    'Status': 'Verified',
-    'Division Name': 'High Court Division',
-    'Case Category': 'Civil Appeal',
-    'Case Type': 'First Appeal',
-    'Case Status': 'Power/Authorization Submission',
-    'Rule Number': 'HC-2222222/2025',
-    'Case Claim': '33.00',
-    'Proposed Type': 'Loan',
-    'Account Name': '33',
-    'Account': '3333333333333333',
-    'Cause Action': 'asdfsadf',
-    'Filing Date': '19-02-2025',
-    'Last Activities': 'asdf',
-    'Remarks': 'asdf',
-    'Account Closing Status': 'No',
-    'District Name': 'Bagerhat',
-    'HC Bench': 'A',
-  },
-  {
-    'Actions': ['D', 'E', 'STC', 'V', 'RF', 'AR'],
-    'Status': 'Verified',
-    'Division Name': 'High Court Division',
-    'Case Category': 'Civil Appeal',
-    'Case Type': 'First Appeal',
-    'Case Status': 'Obtained Rule Copy From High Court Sec...',
-    'Rule Number': 'HC-33333333/2025',
-    'Case Claim': '333333.00',
-    'Proposed Type': 'Loan',
-    'Account Name': 'asdfasfd',
-    'Account': '3333333333333333',
-    'Cause Action': 'fasdf',
-    'Filing Date': '19-02-2025',
-    'Last Activities': 'asd',
-    'Remarks': 'asdfasfd',
-    'Account Closing Status': 'No',
-    'District Name': 'Bagerhat',
-    'HC Bench': 'A',
-  },
-  {
-    'Actions': ['P', 'RF', 'STC', 'V'],
-    'Status': 'File Closed',
-    'Division Name': 'High Court Division',
-    'Case Category': 'Civil Appeal',
-    'Case Type': 'First Misc Appeal',
-    'Case Status': 'Obtained Rule Copy From High Court Sec...',
-    'Rule Number': 'HC-444/2024',
-    'Case Claim': '342324.00',
-    'Proposed Type': 'Loan',
-    'Account Name': 'dsdsf',
-    'Account': '1236547893214562',
-    'Cause Action': 'sdf ds fd',
-    'Filing Date': '22-10-2024',
-    'Last Activities': 'zx zx',
-    'Remarks': 's fsd f',
-    'Account Closing Status': 'No',
-    'District Name': 'Bandarban',
-    'HC Bench': 'A',
-  },
-  {
-    'Actions': ['E'],
-    'Status': 'Verified',
-    'Division Name': 'Appellate Division',
-    'Case Category': 'Civil Cases',
-    'Case Type': 'Civil Appeal',
-    'Case Status': 'Power/Authorization Submission',
-    'Rule Number': 'HC-88888/2024',
-    'Case Claim': '0.00',
-    'Proposed Type': '',
-    'Account Name': '888',
-    'Account': '',
-    'Cause Action': '888',
-    'Filing Date': '15-05-2024',
-    'Last Activities': '88',
-    'Remarks': '',
-    'Account Closing Status': 'Yes',
-    'District Name': 'Bagerhat',
-    'HC Bench': 'A',
+    'Actions': ['D', 'V', 'U', 'P'],
+    'Status': 'Approved',
+    'Loan A/C or Card No.': '1111111111111111',
+    'A/C Name or Name on Card': 'M/s Sayman Hardware',
+    'Case Number': 'Artho-01/15',
+    'Entry By': 'Super Admin(7777777)',
+    'Entry Date Time': '01-Dec-22 09:15 AM',
+    'Update By': 'Super Admin(7777777)',
+    'Update Date and Time': '29-Nov-22 05:21 PM',
   },
 ];
