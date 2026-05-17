@@ -86,47 +86,17 @@ class MiniCalendar extends StatelessWidget {
   const MiniCalendar({
     super.key,
     required this.highlightedDays,
+    this.onDayTap,
   });
 
   final List<int> highlightedDays;
+  final ValueChanged<int>? onDayTap;
 
   @override
   Widget build(BuildContext context) {
     const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const days = [
-      '',
-      '',
-      '',
-      '1',
-      '2',
-      '3',
-      '4',
-      '5',
-      '6',
-      '7',
-      '8',
-      '9',
-      '10',
-      '11',
-      '12',
-      '13',
-      '14',
-      '15',
-      '16',
-      '17',
-      '18',
-      '19',
-      '20',
-      '21',
-      '22',
-      '23',
-      '24',
-      '25',
-      '26',
-      '27',
-      '28',
-      '29',
-      '30',
+      '', '', '', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30',
     ];
 
     return Column(
@@ -163,24 +133,25 @@ class MiniCalendar extends StatelessWidget {
             final day = int.tryParse(label);
             final isActive = day != null && highlightedDays.contains(day);
 
-            return Container(
-              decoration: BoxDecoration(
-                color:
-                    isActive ? AppColor.primary : AppColor.sectionBg,
-                borderRadius: BorderRadius.circular(14),
-                border: Border.all(
-                  color: isActive
-                      ? AppColor.primary
-                      : AppColor.borderSoft,
+            return InkWell(
+              onTap: day != null ? () => onDayTap?.call(day) : null,
+              borderRadius: BorderRadius.circular(14),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: isActive ? AppColor.primary : AppColor.sectionBg,
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(
+                    color: isActive ? AppColor.primary : AppColor.borderSoft,
+                  ),
                 ),
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                label,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: isActive ? AppColor.white : AppColor.textSteel,
-                      fontWeight: FontWeight.w700,
-                    ),
+                alignment: Alignment.center,
+                child: Text(
+                  label,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: isActive ? AppColor.white : AppColor.textSteel,
+                        fontWeight: FontWeight.w700,
+                      ),
+                ),
               ),
             );
           },

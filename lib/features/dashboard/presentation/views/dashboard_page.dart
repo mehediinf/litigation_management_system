@@ -17,6 +17,7 @@ import 'appeal_bail_money_recovery/appeal_bail_money_recovery_preview.dart';
 import 'professionals_bill/professionals_bill_preview.dart';
 import 'litigation_management_handbook/litigation_management_handbook_preview.dart';
 import 'memos_notices/memos_notices_page.dart';
+import 'case_schedule_today/case_schedule_today_preview.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key, required this.viewModel});
@@ -443,7 +444,9 @@ class _DashboardContentState extends State<DashboardContent> {
                                   shape: BoxShape.circle,
                                   boxShadow: [
                                     BoxShadow(
-                                      color: AppColor.primary.withValues(alpha: 0.1),
+                                      color: AppColor.primary.withValues(
+                                        alpha: 0.1,
+                                      ),
                                       blurRadius: 10,
                                       offset: const Offset(0, 4),
                                     ),
@@ -484,14 +487,20 @@ class _DashboardContentState extends State<DashboardContent> {
                                   children: [
                                     Text(
                                       '${summary.memosAndNotices.length} New Messages',
-                                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
                                             fontWeight: FontWeight.w800,
                                             color: AppColor.textPrimary,
                                           ),
                                     ),
                                     Text(
                                       'Click to view active memos and notices',
-                                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
                                             color: AppColor.textSecondary,
                                             fontWeight: FontWeight.w500,
                                           ),
@@ -512,8 +521,27 @@ class _DashboardContentState extends State<DashboardContent> {
                       DashboardPanelCard(
                         title: 'Case Schedule Today',
                         icon: Icons.calendar_month_outlined,
+                        onTap: () {
+                          Navigator.of(context).push<void>(
+                            MaterialPageRoute<void>(
+                              builder: (_) => CaseScheduleTodayPreview(
+                                selectedDate: summary.scheduleMonthLabel,
+                              ),
+                            ),
+                          );
+                        },
                         child: MiniCalendar(
                           highlightedDays: summary.highlightedScheduleDays,
+                          onDayTap: (day) {
+                            Navigator.of(context).push<void>(
+                              MaterialPageRoute<void>(
+                                builder: (_) => CaseScheduleTodayPreview(
+                                  selectedDate:
+                                      '$day ${summary.scheduleMonthLabel}',
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ],
