@@ -14,66 +14,67 @@ class MemoTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [
-            AppColor.memoGradientStart,
-            AppColor.primary,
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(18),
-        boxShadow: const [
-          BoxShadow(
-            color: AppColor.primaryGlow,
-            blurRadius: 16,
-            offset: Offset(0, 8),
-          ),
-        ],
+        color: AppColor.softBlue,
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: AppColor.borderSoft.withValues(alpha: 0.6)),
       ),
       child: Row(
         children: [
           Container(
-            width: 42,
-            height: 42,
+            width: 44,
+            height: 44,
             decoration: BoxDecoration(
-              color: AppColor.white.withValues(alpha: 0.12),
+              color: AppColor.primary.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(14),
             ),
             child: const Icon(
-              Icons.description_outlined,
-              color: AppColor.white,
+              Icons.description_rounded,
+              color: AppColor.primary,
+              size: 22,
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   item.title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppColor.white,
-                        fontWeight: FontWeight.w600,
+                        color: AppColor.textPrimary,
+                        fontWeight: FontWeight.w700,
+                        height: 1.3,
                       ),
                 ),
-                const SizedBox(height: 6),
-                Text(
-                  item.date,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColor.white70,
-                      ),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.access_time_rounded,
+                      size: 14,
+                      color: AppColor.textSecondary,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      item.date,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: AppColor.textSecondary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
           const SizedBox(width: 8),
           const Icon(
-            Icons.arrow_forward_ios_rounded,
-            size: 16,
-            color: AppColor.white70,
+            Icons.chevron_right_rounded,
+            color: AppColor.textMuted,
           ),
         ],
       ),

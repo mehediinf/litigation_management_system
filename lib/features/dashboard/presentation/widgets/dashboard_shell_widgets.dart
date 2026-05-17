@@ -494,55 +494,52 @@ class DashboardSectionTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Container(
-              width: 38,
-              height: 38,
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [
-                    AppColor.cardGradientStart,
-                    AppColor.softBlueAlt,
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: AppColor.primary.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  icon,
+                  size: 22,
+                  color: AppColor.primaryStrong,
+                ),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.w900,
+                            color: AppColor.textPrimary,
+                            letterSpacing: -0.5,
+                          ),
+                    ),
+                    Text(
+                      subtitle,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: AppColor.textSecondary,
+                            fontWeight: FontWeight.w500,
+                          ),
+                    ),
                   ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
                 ),
-                borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: AppColor.fieldBorder),
               ),
-              child: Icon(
-                icon,
-                size: 20,
-                color: AppColor.primary,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                    title,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.w800,
-                          color: AppColor.textPrimary,
-                        ),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 4),
-        Padding(
-          padding: const EdgeInsets.only(left: 50),
-          child: Text(
-            subtitle,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppColor.textSecondary,
-                ),
+            ],
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -555,6 +552,7 @@ class DashboardMetricCard extends StatelessWidget {
     required this.icon,
     required this.accent,
     this.showValue = true,
+    this.onTap,
   });
 
   final String label;
@@ -562,6 +560,7 @@ class DashboardMetricCard extends StatelessWidget {
   final IconData icon;
   final Color accent;
   final bool showValue;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -570,84 +569,103 @@ class DashboardMetricCard extends StatelessWidget {
         final isCompact = constraints.maxWidth < 190;
 
         return Container(
-          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: AppColor.panelBg,
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: AppColor.borderSoft),
-            boxShadow: const [
+            borderRadius: BorderRadius.circular(28),
+            border: Border.all(color: AppColor.borderSoft.withValues(alpha: 0.8)),
+            boxShadow: [
               BoxShadow(
-                color: AppColor.cardShadow,
-                blurRadius: 18,
-                offset: Offset(0, 8),
+                color: accent.withValues(alpha: 0.06),
+                blurRadius: 20,
+                offset: const Offset(0, 10),
               ),
             ],
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 42,
-                height: 42,
-                decoration: BoxDecoration(
-                  color: accent.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: Icon(icon, color: accent),
-              ),
-
-              const SizedBox(height: 12),
-
-              if (showValue) ...[
-                Text(
-                  value ?? '',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.w800,
-                    fontSize: isCompact ? 25 : null,
-                    color: AppColor.textPrimary,
+          clipBehavior: Clip.antiAlias,
+          child: Material(
+            color: AppColor.transparent,
+            child: InkWell(
+              onTap: onTap,
+              child: Stack(
+                children: [
+                  Positioned(
+                    right: -20,
+                    top: -20,
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        color: accent.withValues(alpha: 0.03),
+                        shape: BoxShape.circle,
+                      ),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 6),
-              ] else ...[
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: accent.withValues(alpha: 0.10),
-                    borderRadius: BorderRadius.circular(999),
-                  ),
-                  child: Text(
-                    'Reference',
-                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                          color: accent,
-                          fontWeight: FontWeight.w700,
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: 46,
+                          height: 46,
+                          decoration: BoxDecoration(
+                            color: accent.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Icon(icon, color: accent, size: 22),
                         ),
+                        const Spacer(),
+                        if (showValue) ...[
+                          Text(
+                            value ?? '',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: isCompact ? 24 : 28,
+                                  color: AppColor.textPrimary,
+                                  letterSpacing: -1,
+                                ),
+                          ),
+                        ] else ...[
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: accent.withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              'GUIDE',
+                              style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                                    color: accent,
+                                    fontWeight: FontWeight.w900,
+                                    letterSpacing: 0.5,
+                                  ),
+                            ),
+                          ),
+                        ],
+                        const SizedBox(height: 4),
+                        Text(
+                          label,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: AppColor.textSecondary,
+                                fontWeight: FontWeight.w600,
+                                height: 1.2,
+                              ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 10),
-              ],
-
-              Expanded(
-                child: Text(
-                  label,
-                  maxLines: showValue ? 3 : 4,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppColor.textSecondary,
-                    fontSize: isCompact ? 13 : null,
-                    height: 1.25,
-                  ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
         );
       },
     );
   }
-
 }
 
 class DashboardDoubleSection extends StatelessWidget {
@@ -691,74 +709,88 @@ class DashboardPanelCard extends StatelessWidget {
     required this.title,
     required this.icon,
     required this.child,
+    this.onTap,
   });
 
   final String title;
   final IconData icon;
   final Widget child;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: AppColor.panelBg,
-        borderRadius: BorderRadius.circular(26),
-        border: Border.all(color: AppColor.borderSoft),
+        borderRadius: BorderRadius.circular(32),
+        border: Border.all(color: AppColor.borderSoft.withValues(alpha: 0.7)),
         boxShadow: const [
           BoxShadow(
-            color: AppColor.cardShadow,
-            blurRadius: 18,
-            offset: Offset(0, 8),
+            color: Color(0x060F172A),
+            blurRadius: 24,
+            offset: Offset(0, 12),
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-            decoration: BoxDecoration(
-              color: AppColor.sectionBg,
-              borderRadius: BorderRadius.circular(18),
-              border: Border.all(color: AppColor.borderSoft),
-            ),
-            child: Row(
-              children: [
-                Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [
-                        AppColor.cardGradientStart,
-                        AppColor.cardGradientEnd,
-                      ],
-                    ),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(
-                    icon,
-                    size: 19,
-                    color: AppColor.primary,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    title,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w800,
-                          color: AppColor.textPrimary,
+      clipBehavior: Clip.antiAlias,
+      child: Material(
+        color: AppColor.transparent,
+        child: InkWell(
+          onTap: onTap,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            AppColor.primary.withValues(alpha: 0.12),
+                            AppColor.primary.withValues(alpha: 0.04),
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
                         ),
-                  ),
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: Icon(
+                        icon,
+                        size: 20,
+                        color: AppColor.primaryStrong,
+                      ),
+                    ),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: Text(
+                        title,
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w900,
+                              color: AppColor.textPrimary,
+                              letterSpacing: -0.3,
+                            ),
+                      ),
+                    ),
+                    Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 14,
+                      color: AppColor.textMuted.withValues(alpha: 0.5),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 20),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+                child: child,
+              ),
+            ],
           ),
-          const SizedBox(height: 16),
-          child,
-        ],
+        ),
       ),
     );
   }

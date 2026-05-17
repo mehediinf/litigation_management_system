@@ -9,6 +9,7 @@ class DashboardSummary {
     required this.legalCostCr,
     required this.deliveryStatus,
     required this.liveCaseInformation,
+    required this.disposalCaseInformation,
     required this.warrantProcess,
     required this.caseUpdateInformation,
     required this.hcAdMatter,
@@ -26,6 +27,7 @@ class DashboardSummary {
   final double legalCostCr;
   final List<ComparisonMetric> deliveryStatus;
   final List<ChartMetric> liveCaseInformation;
+  final List<ChartMetric> disposalCaseInformation;
   final RatioMetric warrantProcess;
   final List<ChartMetric> caseUpdateInformation;
   final List<ChartMetric> hcAdMatter;

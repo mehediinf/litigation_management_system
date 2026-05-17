@@ -28,6 +28,12 @@ class DashboardLocalDataSource {
         {'label': 'Others', 'value': 567},
         {'label': 'Total', 'value': 17014},
       ],
+      'disposalCaseInformation': <Map<String, dynamic>>[
+        {'label': 'ARA', 'value': 4758},
+        {'label': 'NI ACT', 'value': 9243},
+        {'label': 'Others', 'value': 1919},
+        {'label': 'Total', 'value': 15920},
+      ],
       'warrantProcess': <String, dynamic>{
         'primaryLabel': 'Pending Warrant',
         'secondaryLabel': 'Warrant Exe.',

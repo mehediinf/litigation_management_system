@@ -9,6 +9,7 @@ class DashboardSummaryModel extends DashboardSummary {
     required super.legalCostCr,
     required super.deliveryStatus,
     required super.liveCaseInformation,
+    required super.disposalCaseInformation,
     required super.warrantProcess,
     required super.caseUpdateInformation,
     required super.hcAdMatter,
@@ -31,6 +32,9 @@ class DashboardSummaryModel extends DashboardSummary {
       ),
       liveCaseInformation: _chartMetrics(
         map['liveCaseInformation'] as List<dynamic>? ?? const [],
+      ),
+      disposalCaseInformation: _chartMetrics(
+        map['disposalCaseInformation'] as List<dynamic>? ?? const [],
       ),
       warrantProcess: _ratioMetric(
         map['warrantProcess'] as Map<String, dynamic>? ?? const {},

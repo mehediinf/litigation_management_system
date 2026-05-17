@@ -7,6 +7,8 @@ import 'package:litigation_management_system/app/theme/app_color.dart';
 AppBar buildInstrumentDeliveryCasesAppBar(
   BuildContext context, {
   required String title,
+  Widget? titleWidget,
+  List<Widget>? actions,
   PreferredSizeWidget? bottom,
 }) {
   final theme = Theme.of(context);
@@ -41,19 +43,21 @@ AppBar buildInstrumentDeliveryCasesAppBar(
         ),
       ],
     ),
-    title: Text(
-      title,
-      style: theme.textTheme.titleMedium?.copyWith(
-        fontWeight: FontWeight.w700,
-        letterSpacing: -0.3,
-        color: titleColor,
-        height: 1.2,
-        shadows: const [
-          Shadow(color: Color(0x40000000), blurRadius: 8, offset: Offset(0, 1)),
-        ],
-      ),
-    ),
+    title: titleWidget ??
+        Text(
+          title,
+          style: theme.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.w700,
+            letterSpacing: -0.3,
+            color: titleColor,
+            height: 1.2,
+            shadows: const [
+              Shadow(color: Color(0x40000000), blurRadius: 8, offset: Offset(0, 1)),
+            ],
+          ),
+        ),
     centerTitle: false,
+    actions: actions,
     bottom: bottom,
   );
 }

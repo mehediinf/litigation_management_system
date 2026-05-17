@@ -139,10 +139,12 @@ class VerticalBarChart extends StatelessWidget {
     super.key,
     required this.metrics,
     required this.colors,
+    this.onBarTap,
   });
 
   final List<ChartMetric> metrics;
   final List<Color> colors;
+  final ValueChanged<ChartMetric>? onBarTap;
 
   @override
   Widget build(BuildContext context) {
@@ -161,50 +163,54 @@ class VerticalBarChart extends StatelessWidget {
           final barHeight = maxValue == 0 ? 0.0 : (metric.value / maxValue) * 110;
 
           return Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    metric.value % 1 == 0
-                        ? metric.value.toInt().toString()
-                        : metric.value.toStringAsFixed(2),
-                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                          color: AppColor.textSlate,
-                          fontWeight: FontWeight.w700,
-                        ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 8),
-                  Container(
-                    height: barHeight + 12,
-                decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [color.withValues(alpha: 0.55), color],
-                      ),
-                      borderRadius: BorderRadius.circular(18),
-                      boxShadow: [
-                        BoxShadow(
-                          color: color.withValues(alpha: 0.18),
-                          blurRadius: 12,
-                          offset: const Offset(0, 6),
-                        ),
-                      ],
+            child: InkWell(
+              onTap: onBarTap != null ? () => onBarTap!(metric) : null,
+              borderRadius: BorderRadius.circular(14),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      metric.value % 1 == 0
+                          ? metric.value.toInt().toString()
+                          : metric.value.toStringAsFixed(2),
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            color: AppColor.textSlate,
+                            fontWeight: FontWeight.w700,
+                          ),
+                      textAlign: TextAlign.center,
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    metric.label,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppColor.textSlate,
-                          fontWeight: FontWeight.w600,
+                    const SizedBox(height: 8),
+                    Container(
+                      height: barHeight + 12,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [color.withValues(alpha: 0.55), color],
                         ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
+                        borderRadius: BorderRadius.circular(18),
+                        boxShadow: [
+                          BoxShadow(
+                            color: color.withValues(alpha: 0.18),
+                            blurRadius: 12,
+                            offset: const Offset(0, 6),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      metric.label,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: AppColor.textSlate,
+                            fontWeight: FontWeight.w600,
+                          ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
               ),
             ),
           );
@@ -220,11 +226,15 @@ class DonutBreakdown extends StatelessWidget {
     required this.ratio,
     required this.primaryColor,
     required this.secondaryColor,
+    this.onPrimaryTap,
+    this.onSecondaryTap,
   });
 
   final RatioMetric ratio;
   final Color primaryColor;
   final Color secondaryColor;
+  final VoidCallback? onPrimaryTap;
+  final VoidCallback? onSecondaryTap;
 
   @override
   Widget build(BuildContext context) {
@@ -233,67 +243,76 @@ class DonutBreakdown extends StatelessWidget {
 
     return Column(
       children: [
-        SizedBox(
-          width: 150,
-          height: 150,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              SizedBox(
-                width: 130,
-                height: 130,
-                child: CircularProgressIndicator(
-                  value: 1,
-                  strokeWidth: 16,
-                  color: secondaryColor,
-                ),
-              ),
-              SizedBox(
-                width: 130,
-                height: 130,
-                child: CircularProgressIndicator(
-                  value: progress,
-                  strokeWidth: 16,
-                  color: primaryColor,
-                ),
-              ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    '${(progress * 100).round()}%',
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.w800,
-                        ),
+        GestureDetector(
+          onTap: onPrimaryTap,
+          child: SizedBox(
+            width: 150,
+            height: 150,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                SizedBox(
+                  width: 130,
+                  height: 130,
+                  child: CircularProgressIndicator(
+                    value: 1,
+                    strokeWidth: 16,
+                    color: secondaryColor,
                   ),
-                  Text(
-                    ratio.primaryLabel,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppColor.textSecondary,
-                        ),
-                    textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  width: 130,
+                  height: 130,
+                  child: CircularProgressIndicator(
+                    value: progress,
+                    strokeWidth: 16,
+                    color: primaryColor,
                   ),
-                ],
-              ),
-            ],
+                ),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      '${(progress * 100).round()}%',
+                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                            fontWeight: FontWeight.w800,
+                          ),
+                    ),
+                    Text(
+                      ratio.primaryLabel,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: AppColor.textSecondary,
+                          ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
         const SizedBox(height: 18),
         Row(
           children: [
             Expanded(
-              child: _LegendStat(
-                label: ratio.primaryLabel,
-                value: ratio.primaryValue.toStringAsFixed(0),
-                color: primaryColor,
+              child: GestureDetector(
+                onTap: onPrimaryTap,
+                child: _LegendStat(
+                  label: ratio.primaryLabel,
+                  value: ratio.primaryValue.toStringAsFixed(0),
+                  color: primaryColor,
+                ),
               ),
             ),
             const SizedBox(width: 10),
             Expanded(
-              child: _LegendStat(
-                label: ratio.secondaryLabel,
-                value: ratio.secondaryValue.toStringAsFixed(0),
-                color: secondaryColor,
+              child: GestureDetector(
+                onTap: onSecondaryTap,
+                child: _LegendStat(
+                  label: ratio.secondaryLabel,
+                  value: ratio.secondaryValue.toStringAsFixed(0),
+                  color: secondaryColor,
+                ),
               ),
             ),
           ],
