@@ -1,3 +1,5 @@
+// lib/features/dashboard/domain/entities/dashboard_summary.dart
+
 class DashboardSummary {
   const DashboardSummary({
     required this.firstLegalNotice,

@@ -4,16 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:litigation_management_system/app/theme/app_color.dart';
 import 'package:litigation_management_system/core/constants/app_strings.dart';
 import 'package:litigation_management_system/features/dashboard/presentation/viewmodels/dashboard_view_model.dart';
+import 'package:litigation_management_system/features/dashboard/presentation/views/instrument_delivery_status_cases/instrument_delivery_status_cases_page.dart';
 import 'package:litigation_management_system/features/dashboard/presentation/widgets/dashboard_chart_widgets.dart';
 import 'package:litigation_management_system/features/dashboard/presentation/widgets/dashboard_shell_widgets.dart';
 import 'package:litigation_management_system/features/dashboard/presentation/widgets/dashboard_support_widgets.dart';
 import 'package:litigation_management_system/shared/widgets/state_renderer.dart';
 
 class DashboardPage extends StatefulWidget {
-  const DashboardPage({
-    super.key,
-    required this.viewModel,
-  });
+  const DashboardPage({super.key, required this.viewModel});
 
   final DashboardViewModel viewModel;
 
@@ -26,18 +24,13 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.drawerBg,
-      body: SafeArea(
-        child: DashboardContent(viewModel: widget.viewModel),
-      ),
+      body: SafeArea(child: DashboardContent(viewModel: widget.viewModel)),
     );
   }
 }
 
 class DashboardContent extends StatefulWidget {
-  const DashboardContent({
-    super.key,
-    required this.viewModel,
-  });
+  const DashboardContent({super.key, required this.viewModel});
 
   final DashboardViewModel viewModel;
 
@@ -62,20 +55,20 @@ class _DashboardContentState extends State<DashboardContent> {
         final horizontalPadding = width >= 1200
             ? 28.0
             : width >= 700
-                ? 22.0
-                : 16.0;
+            ? 22.0
+            : 16.0;
         final metricColumns = width >= 1200
             ? 4
             : width >= 800
-                ? 3
-                : 2;
+            ? 3
+            : 2;
         final metricAspectRatio = width >= 1200
             ? 1.34
             : width >= 800
-                ? 1.18
-                : width < 380
-                    ? 0.82
-                    : 0.9;
+            ? 1.18
+            : width < 380
+            ? 0.82
+            : 0.9;
 
         return StateRenderer(
           isLoading: widget.viewModel.isLoading,
@@ -97,13 +90,25 @@ class _DashboardContentState extends State<DashboardContent> {
                       DashboardPanelCard(
                         title: 'Instrument Deli. & Case Pen.',
                         icon: Icons.local_shipping_outlined,
-                        child: ComparisonChart(items: summary.deliveryStatus),
+                        child: ComparisonChart(
+                          items: summary.deliveryStatus,
+                          onRowTap: (metric) {
+                            Navigator.of(context).push<void>(
+                              MaterialPageRoute<void>(
+                                builder: (_) =>
+                                    InstrumentDeliveryStatusCasesPage(
+                                      sectionTitle: metric.label,
+                                    ),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                       const SizedBox(height: 14),
                       DashboardPanelCard(
                         title: 'Live Case Information',
                         icon: Icons.query_stats_outlined,
-                          child: VerticalBarChart(
+                        child: VerticalBarChart(
                           metrics: summary.liveCaseInformation,
                           colors: const [
                             AppColor.dashboardMetricIndigo,
@@ -219,7 +224,8 @@ class _DashboardContentState extends State<DashboardContent> {
 
                           DashboardMetricCard(
                             label: 'Legal Cost',
-                            value: '${summary.legalCostCr.toStringAsFixed(2)} Cr.',
+                            value:
+                                '${summary.legalCostCr.toStringAsFixed(2)} Cr.',
                             icon: Icons.account_balance_wallet_outlined,
                             accent: AppColor.dashboardAccentRose,
                           ),
@@ -229,7 +235,6 @@ class _DashboardContentState extends State<DashboardContent> {
                             accent: AppColor.dashboardAccentOrange,
                             showValue: false,
                           ),
-
                         ],
                       ),
                       const SizedBox(height: 14),
@@ -258,7 +263,3 @@ class _DashboardContentState extends State<DashboardContent> {
     );
   }
 }
-
-
-
-

@@ -6,9 +6,11 @@ class ComparisonChart extends StatelessWidget {
   const ComparisonChart({
     super.key,
     required this.items,
+    this.onRowTap,
   });
 
   final List<ComparisonMetric> items;
+  final ValueChanged<ComparisonMetric>? onRowTap;
 
   @override
   Widget build(BuildContext context) {
@@ -34,16 +36,28 @@ class ComparisonChart extends StatelessWidget {
           final total = item.primaryValue + item.secondaryValue;
           final widthFactor = total / maxValue;
 
-          return Padding(
+          final row = Padding(
             padding: const EdgeInsets.only(bottom: 14),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  item.label,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        item.label,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
                       ),
+                    ),
+                    if (onRowTap != null)
+                      Icon(
+                        Icons.chevron_right_rounded,
+                        size: 22,
+                        color: AppColor.textMuted,
+                      ),
+                  ],
                 ),
                 const SizedBox(height: 8),
                 LayoutBuilder(
@@ -96,6 +110,22 @@ class ComparisonChart extends StatelessWidget {
                   },
                 ),
               ],
+            ),
+          );
+
+          if (onRowTap == null) {
+            return row;
+          }
+
+          return Material(
+            color: AppColor.transparent,
+            child: InkWell(
+              onTap: () => onRowTap!(item),
+              borderRadius: BorderRadius.circular(14),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                child: row,
+              ),
             ),
           );
         }),
