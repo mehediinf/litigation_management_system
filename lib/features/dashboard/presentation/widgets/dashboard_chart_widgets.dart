@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:litigation_management_system/app/theme/app_color.dart';
 import 'package:litigation_management_system/features/dashboard/domain/entities/dashboard_summary.dart';
@@ -244,7 +245,25 @@ class DonutBreakdown extends StatelessWidget {
     return Column(
       children: [
         GestureDetector(
-          onTap: onPrimaryTap,
+          onTapDown: (details) {
+            final RenderBox box = context.findRenderObject() as RenderBox;
+            final Offset localOffset = box.globalToLocal(details.globalPosition);
+            final Offset center = Offset(box.size.width / 2, 75); // 75 is half of 150 height
+            final double dx = localOffset.dx - center.dx;
+            final double dy = localOffset.dy - center.dy;
+            
+            // Calculate angle in radians and convert to 0-1 percentage
+            // Adjusting by -pi/2 because Flutter's arcs start from the top (-90 degrees)
+            double angle = (math.atan2(dy, dx) + math.pi / 2);
+            if (angle < 0) angle += 2 * math.pi;
+            final double tapPercentage = angle / (2 * math.pi);
+
+            if (tapPercentage <= progress) {
+              onPrimaryTap?.call();
+            } else {
+              onSecondaryTap?.call();
+            }
+          },
           child: SizedBox(
             width: 150,
             height: 150,

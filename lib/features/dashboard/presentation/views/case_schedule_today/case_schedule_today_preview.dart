@@ -36,7 +36,10 @@ class CaseScheduleTodayPreview extends StatelessWidget {
                     color: AppColor.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(Icons.calendar_today_rounded, color: AppColor.primary),
+                  child: const Icon(
+                    Icons.calendar_today_rounded,
+                    color: AppColor.primary,
+                  ),
                 ),
                 const SizedBox(width: 14),
                 Column(
@@ -45,16 +48,16 @@ class CaseScheduleTodayPreview extends StatelessWidget {
                     Text(
                       'Daily Schedule',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w800,
-                            color: AppColor.textPrimary,
-                          ),
+                        fontWeight: FontWeight.w800,
+                        color: AppColor.textPrimary,
+                      ),
                     ),
                     Text(
                       'Total ${mockData.length} cases scheduled',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppColor.textSecondary,
-                            fontWeight: FontWeight.w500,
-                          ),
+                        color: AppColor.textSecondary,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ],
                 ),
@@ -83,7 +86,7 @@ class CaseScheduleTodayPreview extends StatelessWidget {
         'loan_ac': '1515603837207001',
         'ac_name': 'Md Rafikul Islam',
         'case_number': 'Artho-39/21',
-        'curr_date': '17-Jul-24',
+        'curr_date': date,
         'curr_status': 'Written Statement',
         'court_name': '2nd Joint Dist & Session Judge Court',
         'lawyer_name': 'MD SULAIMAN MIAH SWAPON',
@@ -95,7 +98,7 @@ class CaseScheduleTodayPreview extends StatelessWidget {
         'loan_ac': '1502600740370002',
         'ac_name': 'Nazrul Enterprise',
         'case_number': 'CR-253/15(SC-6950/17)',
-        'curr_date': '17-Jul-24',
+        'curr_date': date,
         'curr_status': 'Witness',
         'court_name': '1st Joint Metro Session Judge Court',
         'lawyer_name': 'THE LAWYERS & JURISTS LTD',
@@ -107,8 +110,8 @@ class CaseScheduleTodayPreview extends StatelessWidget {
         'loan_ac': '1529604071760002',
         'ac_name': 'M/S Tashin Enterprise',
         'case_number': 'CR-3779/21(Session Case-20732/2022)',
-        'curr_date': '17-Jul-24',
-        'curr_status': '',
+        'curr_date': date,
+        'curr_status': 'Judgment',
         'court_name': '2nd Joint Metro Session Judge Court',
         'lawyer_name': 'MD. ABDUL MAZED',
         'district': 'Dhaka',
@@ -154,15 +157,18 @@ class _ScheduleCard extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w800,
-                          color: AppColor.textPrimary,
-                        ),
+                      fontWeight: FontWeight.w800,
+                      color: AppColor.textPrimary,
+                    ),
                   ),
                 ),
                 if (item['curr_status']?.isNotEmpty ?? false) ...[
                   const SizedBox(width: 8),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: AppColor.primary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
@@ -170,9 +176,9 @@ class _ScheduleCard extends StatelessWidget {
                     child: Text(
                       item['curr_status'] ?? '',
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                            color: AppColor.primaryStrong,
-                            fontWeight: FontWeight.w900,
-                          ),
+                        color: AppColor.primaryStrong,
+                        fontWeight: FontWeight.w900,
+                      ),
                     ),
                   ),
                 ],
@@ -183,26 +189,58 @@ class _ScheduleCard extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child: Column(
               children: [
-                _buildInfoRow(context, 'Loan A/C', item['loan_ac'] ?? '', Icons.account_balance_wallet_outlined),
+                _buildInfoRow(
+                  context,
+                  'Loan A/C',
+                  item['loan_ac'] ?? '',
+                  Icons.account_balance_wallet_outlined,
+                ),
                 const SizedBox(height: 10),
-                _buildInfoRow(context, 'Case No', item['case_number'] ?? '', Icons.folder_open_outlined),
+                _buildInfoRow(
+                  context,
+                  'Case No',
+                  item['case_number'] ?? '',
+                  Icons.folder_open_outlined,
+                ),
                 const SizedBox(height: 10),
-                _buildInfoRow(context, 'Lawyer', item['lawyer_name'] ?? '', Icons.person_pin_outlined),
-                
+                _buildInfoRow(
+                  context,
+                  'Lawyer',
+                  item['lawyer_name'] ?? '',
+                  Icons.person_pin_outlined,
+                ),
+
                 const Divider(height: 24, thickness: 0.5),
 
-                _buildLongInfo(context, 'Court Name', item['court_name'] ?? '', Icons.account_balance_outlined),
-                
+                _buildLongInfo(
+                  context,
+                  'Court Name',
+                  item['court_name'] ?? '',
+                  Icons.account_balance_outlined,
+                ),
+
                 const SizedBox(height: 16),
-                
+
                 Row(
                   children: [
-                    Expanded(child: _buildCompactInfo(context, 'District', item['district'] ?? '')),
+                    Expanded(
+                      child: _buildCompactInfo(
+                        context,
+                        'District',
+                        item['district'] ?? '',
+                      ),
+                    ),
                     const SizedBox(width: 8),
-                    Expanded(child: _buildCompactInfo(context, 'Territory', item['territory'] ?? '')),
+                    Expanded(
+                      child: _buildCompactInfo(
+                        context,
+                        'Territory',
+                        item['territory'] ?? '',
+                      ),
+                    ),
                   ],
                 ),
-                
+
                 if (item['prev_remarks']?.isNotEmpty ?? false) ...[
                   const SizedBox(height: 12),
                   _buildRemarkBox(context, item['prev_remarks'] ?? ''),
@@ -215,7 +253,12 @@ class _ScheduleCard extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoRow(BuildContext context, String label, String value, IconData icon) {
+  Widget _buildInfoRow(
+    BuildContext context,
+    String label,
+    String value,
+    IconData icon,
+  ) {
     return Row(
       children: [
         Icon(icon, size: 16, color: AppColor.textMuted),
@@ -225,9 +268,9 @@ class _ScheduleCard extends StatelessWidget {
           child: Text(
             label,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: AppColor.textSecondary,
-                  fontWeight: FontWeight.w600,
-                ),
+              color: AppColor.textSecondary,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
         const Text(':', style: TextStyle(color: AppColor.textMuted)),
@@ -236,16 +279,21 @@ class _ScheduleCard extends StatelessWidget {
           child: Text(
             value,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: AppColor.textPrimary,
-                  fontWeight: FontWeight.w800,
-                ),
+              color: AppColor.textPrimary,
+              fontWeight: FontWeight.w800,
+            ),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildLongInfo(BuildContext context, String label, String value, IconData icon) {
+  Widget _buildLongInfo(
+    BuildContext context,
+    String label,
+    String value,
+    IconData icon,
+  ) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -258,18 +306,18 @@ class _ScheduleCard extends StatelessWidget {
               Text(
                 label,
                 style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      color: AppColor.textSecondary,
-                      fontWeight: FontWeight.w600,
-                    ),
+                  color: AppColor.textSecondary,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               const SizedBox(height: 2),
               Text(
                 value,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppColor.textPrimary,
-                      fontWeight: FontWeight.w700,
-                      height: 1.3,
-                    ),
+                  color: AppColor.textPrimary,
+                  fontWeight: FontWeight.w700,
+                  height: 1.3,
+                ),
               ),
             ],
           ),
@@ -292,10 +340,10 @@ class _ScheduleCard extends StatelessWidget {
           Text(
             label,
             style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                  color: AppColor.textSecondary,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 10,
-                ),
+              color: AppColor.textSecondary,
+              fontWeight: FontWeight.w600,
+              fontSize: 10,
+            ),
           ),
           const SizedBox(height: 4),
           Text(
@@ -303,9 +351,9 @@ class _ScheduleCard extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: AppColor.textPrimary,
-                  fontWeight: FontWeight.w800,
-                ),
+              color: AppColor.textPrimary,
+              fontWeight: FontWeight.w800,
+            ),
           ),
         ],
       ),
@@ -327,19 +375,19 @@ class _ScheduleCard extends StatelessWidget {
           Text(
             'Previous Remarks',
             style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                  color: Colors.amber.shade900,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 9,
-                ),
+              color: Colors.amber.shade900,
+              fontWeight: FontWeight.w700,
+              fontSize: 9,
+            ),
           ),
           const SizedBox(height: 4),
           Text(
             remark,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: AppColor.textPrimary,
-                  fontWeight: FontWeight.w500,
-                  fontStyle: FontStyle.italic,
-                ),
+              color: AppColor.textPrimary,
+              fontWeight: FontWeight.w500,
+              fontStyle: FontStyle.italic,
+            ),
           ),
         ],
       ),

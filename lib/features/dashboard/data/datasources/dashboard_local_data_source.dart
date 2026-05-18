@@ -1,7 +1,9 @@
 
 class DashboardLocalDataSource {
-  Future<Map<String, dynamic>> fetchSummary() async {
+  Future<Map<String, dynamic>> fetchSummary({String? month, String? year}) async {
     await Future<void>.delayed(const Duration(milliseconds: 400));
+
+    final monthLabel = '${(month ?? 'APRIL').toUpperCase()} ${year ?? '2026'}';
 
     return <String, dynamic>{
       'firstLegalNotice': 449,
@@ -18,8 +20,7 @@ class DashboardLocalDataSource {
         },
         {
           'label': 'Instrument Delivered',
-          'primaryValue': 49,
-          'secondaryValue': 42,
+          'primaryValue': 49, 'secondaryValue': 42,
         },
       ],
       'liveCaseInformation': <Map<String, dynamic>>[
@@ -78,8 +79,8 @@ class DashboardLocalDataSource {
           'date': '02-Sep-25',
         },
       ],
-      'highlightedScheduleDays': <int>[5, 10, 17, 24],
-      'scheduleMonthLabel': 'APRIL 2026',
+      'highlightedScheduleDays': <int>[5, 12, 18, 26],
+      'scheduleMonthLabel': monthLabel,
     };
 
   }

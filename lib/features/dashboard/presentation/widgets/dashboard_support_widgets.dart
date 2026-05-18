@@ -86,21 +86,94 @@ class MiniCalendar extends StatelessWidget {
   const MiniCalendar({
     super.key,
     required this.highlightedDays,
+    required this.monthLabel,
+    this.selectedDay,
     this.onDayTap,
+    this.onPreviousMonth,
+    this.onNextMonth,
   });
 
   final List<int> highlightedDays;
+  final String monthLabel;
+  final int? selectedDay;
   final ValueChanged<int>? onDayTap;
+  final VoidCallback? onPreviousMonth;
+  final VoidCallback? onNextMonth;
 
   @override
   Widget build(BuildContext context) {
     const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    const days = [
-      '', '', '', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30',
-    ];
+
+    final monthMap = {
+      'JANUARY': 1, 'FEBRUARY': 2, 'MARCH': 3, 'APRIL': 4, 'MAY': 5, 'JUNE': 6,
+      'JULY': 7, 'AUGUST': 8, 'SEPTEMBER': 9, 'OCTOBER': 10, 'NOVEMBER': 11, 'DECEMBER': 12
+    };
+
+    final labelParts = monthLabel.split(' ');
+    final monthName = labelParts.isNotEmpty ? labelParts[0] : '';
+    final yearName = labelParts.length > 1 ? labelParts[1] : '';
+
+    final month = monthMap[monthName.toUpperCase()] ?? 1;
+    final year = int.tryParse(yearName) ?? DateTime.now().year;
+
+    final firstDayOfMonth = DateTime(year, month, 1);
+    final lastDayOfMonth = DateTime(year, month + 1, 0);
+
+    final List<String> days = [];
+    int firstWeekdayIndex = firstDayOfMonth.weekday % 7; // Sun = 0
+    for (int i = 0; i < firstWeekdayIndex; i++) {
+      days.add('');
+    }
+    for (int i = 1; i <= lastDayOfMonth.day; i++) {
+      days.add(i.toString());
+    }
+
+    final now = DateTime.now();
+    final currentDay = now.day;
+    final isCurrentMonth = now.month == month && now.year == year;
 
     return Column(
       children: [
+        Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+              child: Text(
+                monthName,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w900,
+                      color: AppColor.textPrimary,
+                      letterSpacing: 0.5,
+                    ),
+              ),
+            ),
+            const SizedBox(width: 4),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+              child: Text(
+                yearName,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: AppColor.textSecondary,
+                    ),
+              ),
+            ),
+            const Spacer(),
+            IconButton(
+              onPressed: onPreviousMonth,
+              visualDensity: VisualDensity.compact,
+              icon: const Icon(Icons.chevron_left_rounded, size: 24),
+              color: AppColor.primary,
+            ),
+            IconButton(
+              onPressed: onNextMonth,
+              visualDensity: VisualDensity.compact,
+              icon: const Icon(Icons.chevron_right_rounded, size: 24),
+              color: AppColor.primary,
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: weekdays
@@ -110,7 +183,9 @@ class MiniCalendar extends StatelessWidget {
                     day,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                          color: AppColor.textSecondary,
+                          color: AppColor.textSecondary.withValues(alpha: 0.7),
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
                         ),
                   ),
                 ),
@@ -124,33 +199,79 @@ class MiniCalendar extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 7,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
-            childAspectRatio: 1.15,
+            mainAxisSpacing: 8,
+            crossAxisSpacing: 8,
+            childAspectRatio: 1.1,
           ),
           itemBuilder: (context, index) {
             final label = days[index];
             final day = int.tryParse(label);
-            final isActive = day != null && highlightedDays.contains(day);
+            if (day == null) return const SizedBox.shrink();
+
+            final date = DateTime(year, month, day);
+            final isWeekend = date.weekday == DateTime.friday || date.weekday == DateTime.saturday;
+            final isToday = isCurrentMonth && day == currentDay;
+            final isSelected = day == selectedDay;
+            final hasSchedule = highlightedDays.contains(day);
+
+            Color bgColor = AppColor.sectionBg;
+            Color textColor = AppColor.textSteel;
+            List<BoxShadow>? shadows;
+            Border border = Border.all(color: AppColor.borderSoft.withValues(alpha: 0.5));
+
+            if (isToday) {
+              bgColor = AppColor.primary;
+              textColor = AppColor.white;
+              border = Border.all(color: AppColor.primary);
+              shadows = [
+                BoxShadow(
+                  color: AppColor.primary.withValues(alpha: 0.3),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                )
+              ];
+            } else if (isSelected) {
+              bgColor = AppColor.primary.withValues(alpha: 0.1);
+              textColor = AppColor.primary;
+              border = Border.all(color: AppColor.primary.withValues(alpha: 0.3));
+            } else if (isWeekend) {
+              bgColor = AppColor.dashboardMetricCoral.withValues(alpha: 0.1);
+              textColor = AppColor.dashboardMetricCoral;
+            }
 
             return InkWell(
-              onTap: day != null ? () => onDayTap?.call(day) : null,
-              borderRadius: BorderRadius.circular(14),
+              onTap: () => onDayTap?.call(day),
+              borderRadius: BorderRadius.circular(12),
               child: Container(
                 decoration: BoxDecoration(
-                  color: isActive ? AppColor.primary : AppColor.sectionBg,
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(
-                    color: isActive ? AppColor.primary : AppColor.borderSoft,
-                  ),
+                  color: bgColor,
+                  borderRadius: BorderRadius.circular(12),
+                  border: border,
+                  boxShadow: shadows,
                 ),
-                alignment: Alignment.center,
-                child: Text(
-                  label,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: isActive ? AppColor.white : AppColor.textSteel,
-                        fontWeight: FontWeight.w700,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Text(
+                      label,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: textColor,
+                            fontWeight: (isToday || isSelected) ? FontWeight.w900 : FontWeight.w600,
+                          ),
+                    ),
+                    if (hasSchedule && !isToday)
+                      Positioned(
+                        bottom: 6,
+                        child: Container(
+                          width: 4,
+                          height: 4,
+                          decoration: const BoxDecoration(
+                            color: AppColor.primary,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
                       ),
+                  ],
                 ),
               ),
             );

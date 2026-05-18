@@ -99,16 +99,6 @@ class _DashboardContentState extends State<DashboardContent> {
                       DashboardPanelCard(
                         title: 'Instrument Deli. & Case Pen.',
                         icon: Icons.local_shipping_outlined,
-                        onTap: () {
-                          Navigator.of(context).push<void>(
-                            MaterialPageRoute<void>(
-                              builder: (_) =>
-                                  const InstrumentDeliveryStatusCasesPage(
-                                    sectionTitle: 'Instrument Delivery',
-                                  ),
-                            ),
-                          );
-                        },
                         child: ComparisonChart(
                           items: summary.deliveryStatus,
                           onRowTap: (metric) {
@@ -127,15 +117,6 @@ class _DashboardContentState extends State<DashboardContent> {
                       DashboardPanelCard(
                         title: 'Live Case Information',
                         icon: Icons.query_stats_outlined,
-                        onTap: () {
-                          Navigator.of(context).push<void>(
-                            MaterialPageRoute<void>(
-                              builder: (_) => const LiveCaseInformationPreview(
-                                sectionTitle: 'Total',
-                              ),
-                            ),
-                          );
-                        },
                         child: VerticalBarChart(
                           metrics: summary.liveCaseInformation,
                           onBarTap: (metric) {
@@ -159,16 +140,6 @@ class _DashboardContentState extends State<DashboardContent> {
                       DashboardPanelCard(
                         title: 'Disposal Case Information',
                         icon: Icons.auto_delete_outlined,
-                        onTap: () {
-                          Navigator.of(context).push<void>(
-                            MaterialPageRoute<void>(
-                              builder: (_) =>
-                                  const DisposalCaseInformationPreview(
-                                    sectionTitle: 'Total',
-                                  ),
-                            ),
-                          );
-                        },
                         child: VerticalBarChart(
                           metrics: summary.disposalCaseInformation,
                           onBarTap: (metric) {
@@ -235,16 +206,6 @@ class _DashboardContentState extends State<DashboardContent> {
                       DashboardPanelCard(
                         title: 'Case Update Information',
                         icon: Icons.update_outlined,
-                        onTap: () {
-                          Navigator.of(context).push<void>(
-                            MaterialPageRoute<void>(
-                              builder: (_) =>
-                                  const CaseUpdateInformationPreview(
-                                    sectionTitle: 'Total Pending',
-                                  ),
-                            ),
-                          );
-                        },
                         child: VerticalBarChart(
                           metrics: summary.caseUpdateInformation,
                           onBarTap: (metric) {
@@ -269,16 +230,6 @@ class _DashboardContentState extends State<DashboardContent> {
                         left: DashboardPanelCard(
                           title: 'Appeal & Bail Money Recovery',
                           icon: Icons.payments_outlined,
-                          onTap: () {
-                            Navigator.of(context).push<void>(
-                              MaterialPageRoute<void>(
-                                builder: (_) =>
-                                    const AppealBailMoneyRecoveryPreview(
-                                      sectionTitle: 'Appeal & Bail Recovery',
-                                    ),
-                              ),
-                            );
-                          },
                           child: DonutBreakdown(
                             ratio: summary.appealAndBailMoney,
                             onPrimaryTap: () {
@@ -312,15 +263,6 @@ class _DashboardContentState extends State<DashboardContent> {
                         right: DashboardPanelCard(
                           title: 'Professionals Bill',
                           icon: Icons.receipt_long_outlined,
-                          onTap: () {
-                            Navigator.of(context).push<void>(
-                              MaterialPageRoute<void>(
-                                builder: (_) => const ProfessionalsBillPreview(
-                                  sectionTitle: 'Professionals Bill',
-                                ),
-                              ),
-                            );
-                          },
                           child: VerticalBarChart(
                             metrics: summary.professionalBills,
                             onBarTap: (metric) {
@@ -410,110 +352,114 @@ class _DashboardContentState extends State<DashboardContent> {
                       DashboardPanelCard(
                         title: 'Memos & Notices',
                         icon: Icons.mail_outline_rounded,
-                        onTap: () {
-                          Navigator.of(context).push<void>(
-                            MaterialPageRoute<void>(
-                              builder: (_) => MemosNoticesPage(
-                                items: summary.memosAndNotices,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push<void>(
+                              MaterialPageRoute<void>(
+                                builder: (_) => MemosNoticesPage(
+                                  items: summary.memosAndNotices,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  AppColor.primary.withValues(alpha: 0.08),
+                                  AppColor.primary.withValues(alpha: 0.02),
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: AppColor.primary.withValues(alpha: 0.1),
                               ),
                             ),
-                          );
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                AppColor.primary.withValues(alpha: 0.08),
-                                AppColor.primary.withValues(alpha: 0.02),
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                              color: AppColor.primary.withValues(alpha: 0.1),
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: AppColor.white,
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: AppColor.primary.withValues(
-                                        alpha: 0.1,
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: AppColor.white,
+                                    shape: BoxShape.circle,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: AppColor.primary.withValues(
+                                          alpha: 0.1,
+                                        ),
+                                        blurRadius: 10,
+                                        offset: const Offset(0, 4),
                                       ),
-                                      blurRadius: 10,
-                                      offset: const Offset(0, 4),
-                                    ),
-                                  ],
-                                ),
-                                child: Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    const Icon(
-                                      Icons.notifications_none_rounded,
-                                      color: AppColor.primary,
-                                      size: 24,
-                                    ),
-                                    if (summary.memosAndNotices.isNotEmpty)
-                                      Positioned(
-                                        right: 0,
-                                        top: 0,
-                                        child: Container(
-                                          width: 10,
-                                          height: 10,
-                                          decoration: BoxDecoration(
-                                            color: AppColor.dashboardMetricRed,
-                                            shape: BoxShape.circle,
-                                            border: Border.all(
-                                              color: AppColor.white,
-                                              width: 2,
+                                    ],
+                                  ),
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      const Icon(
+                                        Icons.notifications_none_rounded,
+                                        color: AppColor.primary,
+                                        size: 24,
+                                      ),
+                                      if (summary.memosAndNotices.isNotEmpty)
+                                        Positioned(
+                                          right: 0,
+                                          top: 0,
+                                          child: Container(
+                                            width: 10,
+                                            height: 10,
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  AppColor.dashboardMetricRed,
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                color: AppColor.white,
+                                                width: 2,
+                                              ),
                                             ),
                                           ),
                                         ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(width: 16),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '${summary.memosAndNotices.length} New Messages',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.w800,
+                                              color: AppColor.textPrimary,
+                                            ),
                                       ),
-                                  ],
+                                      Text(
+                                        'Click to view active memos and notices',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall
+                                            ?.copyWith(
+                                              color: AppColor.textSecondary,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '${summary.memosAndNotices.length} New Messages',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                            fontWeight: FontWeight.w800,
-                                            color: AppColor.textPrimary,
-                                          ),
-                                    ),
-                                    Text(
-                                      'Click to view active memos and notices',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall
-                                          ?.copyWith(
-                                            color: AppColor.textSecondary,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                    ),
-                                  ],
+                                const Icon(
+                                  Icons.arrow_forward_ios_rounded,
+                                  size: 14,
+                                  color: AppColor.textMuted,
                                 ),
-                              ),
-                              const Icon(
-                                Icons.arrow_forward_ios_rounded,
-                                size: 14,
-                                color: AppColor.textMuted,
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -521,18 +467,14 @@ class _DashboardContentState extends State<DashboardContent> {
                       DashboardPanelCard(
                         title: 'Case Schedule Today',
                         icon: Icons.calendar_month_outlined,
-                        onTap: () {
-                          Navigator.of(context).push<void>(
-                            MaterialPageRoute<void>(
-                              builder: (_) => CaseScheduleTodayPreview(
-                                selectedDate: summary.scheduleMonthLabel,
-                              ),
-                            ),
-                          );
-                        },
                         child: MiniCalendar(
                           highlightedDays: summary.highlightedScheduleDays,
+                          monthLabel: summary.scheduleMonthLabel,
+                          selectedDay: widget.viewModel.selectedDay,
+                          onPreviousMonth: widget.viewModel.previousMonth,
+                          onNextMonth: widget.viewModel.nextMonth,
                           onDayTap: (day) {
+                            widget.viewModel.selectDay(day);
                             Navigator.of(context).push<void>(
                               MaterialPageRoute<void>(
                                 builder: (_) => CaseScheduleTodayPreview(

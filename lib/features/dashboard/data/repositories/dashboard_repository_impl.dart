@@ -10,9 +10,12 @@ class DashboardRepositoryImpl implements DashboardRepository {
   final DashboardLocalDataSource _dataSource;
 
   @override
-  Future<Result<DashboardSummary>> getSummary() async {
+  Future<Result<DashboardSummary>> getSummary({
+    String? month,
+    String? year,
+  }) async {
     try {
-      final data = await _dataSource.fetchSummary();
+      final data = await _dataSource.fetchSummary(month: month, year: year);
       final summary = DashboardSummaryModel.fromMap(data);
       return Success<DashboardSummary>(summary);
     } catch (_) {

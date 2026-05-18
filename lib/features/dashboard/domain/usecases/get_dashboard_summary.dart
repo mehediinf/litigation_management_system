@@ -7,7 +7,7 @@ class GetDashboardSummary {
 
   final DashboardRepository _repository;
 
-  Future<Result<DashboardSummary>> call() {
-    return _repository.getSummary();
+  Future<Result<DashboardSummary>> call({String? month, String? year}) {
+    return _repository.getSummary(month: month, year: year);
   }
 }
